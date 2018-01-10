@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.jp.dm.dao.TypeMapper">
+
+    <select id="findAllBigtype"  resultType="Bigtype">
+        select * from bigtype where outputDelFlg=0
+    </select>
+
+    <select id="findMiddleTypeByBigtype" parameterType="Middletype" resultType="Middletype">
+        select * from middletype where outputDelFlg=#{outputDelFlg} and bigtypeId=#{bigtypeId}
+    </select>
+
+    <select id="findSmallTypeByBigtype" parameterType="Smalltype" resultType="Smalltype">
+        select * from smalltype where outputDelFlg=#{outputDelFlg} and bigtypeId=#{bigtypeId} and middletypeId=#{middletypeId}
+    </select>
+
+</mapper>

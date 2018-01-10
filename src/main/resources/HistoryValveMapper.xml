@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.jp.dm.dao.HistoryValveMapper">
+
+    <insert id="insertHV" parameterType="HistoryValve">
+        INSERT
+        INTO historyDM(hUsername, hTablename, hTargetId, hDetail,hIp,hHost, hTrkDate)
+        VALUES (#{hUsername}, #{hTablename},#{hTargetId}, #{hDetail}, #{hIp}, #{hHost},#{hTrkDate})
+    </insert>
+
+    <select id="findHistoryValve" resultType="HistoryValve" parameterType="HistoryValve">
+        SELECT * FROM historyDM where  hTrkDate >= #{hTrkDate}
+        order by hTrkDate DESC
+    </select>
+
+    <select id="findHistoryForToday" resultType="HistoryValve" parameterType="HistoryValve">
+        SELECT * FROM historyDM where hTrkDate like "%${hTrkDate}%";
+    </select>
+</mapper>
