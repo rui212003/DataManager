@@ -8,6 +8,28 @@
         select * from inputList where inputDelFlg=#{inputDelFlg} and inputBigtypeId=#{inputBigtypeId} and inputMiddletypeId=#{inputMiddletypeId} and inputSmalltypeId=#{inputSmalltypeId} and inputDate>=#{trkDate}  and #{updDate}>=inputDate
     </select>
 
+    <select id="findInputListById" parameterType="InputList" resultType="InputList">
+        select * from inputList where inputDelFlg=#{inputDelFlg} and inputListId=#{inputListId}
+    </select>
 
+    <update id="updateInputData" parameterType="InputList">
+        UPDATE inputList
+        SET
+        inputNum=#{inputNum},
+        inputDiscount=#{inputDiscount},
+        inputDate=#{inputDate},
+        updDate=#{updDate}
+        where
+        inputListId=#{inputListId}
+    </update>
+
+    <update id="deleteInputData" parameterType="InputList">
+        UPDATE inputList
+        SET
+        inputDelFlg=#{inputDelFlg},
+        updDate=#{updDate}
+        where
+        inputListId=#{inputListId}
+    </update>
 
 </mapper>

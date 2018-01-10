@@ -10,6 +10,8 @@ import co.jp.dm.entity.Smalltype;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,5 +30,33 @@ public class InputService {
         return inputLists;
     }
 
+    /**入庫データを修正する*/
+    public InputList updateInputdata(InputList inputList){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+        inputList.setUpdDate(sdf1.format(date));
+        inputMapper.updateInputData(inputList);
+
+        inputList=inputMapper.findInputListById(inputList);
+
+        return inputList;
+    }
+
+    /**入庫データを削除する*/
+    public void deteleInputdata(InputList inputList){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+        inputList.setInputDelFlg("1");
+        inputList.setUpdDate(sdf1.format(date));
+        inputMapper.deleteInputData(inputList);
+    }
 
 }

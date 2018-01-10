@@ -62,3 +62,40 @@
 		</div>
 	</nav>
 </header>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+    });
+
+    //Logout 関数
+    function logoutFun(){
+        var href = window.location.href ;
+        console.log("href="+href);
+        var tmp=href.split("SK");
+        var newURL="";
+//        for(i=0;i<tmp.length;i++){
+//            console.log("tmp="+i+""    +tmp[i]);
+//        }
+        if(tmp.length>=1){
+            newURL= tmp[0]+"SK";
+        }else{
+            newURL="https://valdac.power-science.com/SK/";
+        }
+        console.log("newURL="+newURL);
+        window.location.href =newURL;
+    }
+
+
+    // str: 日付文字列（yyyy-MM-dd, yyyy/MM/dd）
+    // delim: 区切り文字（"-", "/"など）
+    function isDate (str, delim) {
+        var arr = str.split(delim);
+        if (arr.length !== 3) return false;
+        const date = new Date(arr[0], arr[1] - 1, arr[2]);
+        if (arr[0] !== String(date.getFullYear()) || arr[1] !== ('0' + (date.getMonth() + 1)).slice(-2) || arr[2] !== ('0' + date.getDate()).slice(-2)) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+</script>

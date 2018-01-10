@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,12 +62,13 @@ public class InputController {
 
 
         List<InputList> inputLists=inputService.getInputList(inputList);
+        GoodsList goodsList=new GoodsList();
 
         //入庫データに商品情報を追加する
         if(inputLists!=null){
             for(int nIndex=0;nIndex<inputLists.size();nIndex++){
-                GoodsList goodsListTemp=goodsListService.getGoodsLisById(inputLists.get(nIndex).getGoodsListId());
-
+                GoodsList  goodsListTemp=goodsListService.getGoodsLisById(inputLists.get(nIndex).getGoodsListId());
+                goodsList=goodsListTemp;
                 inputLists.get(nIndex).setGoodsList(goodsListTemp);
             }
         }
@@ -76,11 +78,95 @@ public class InputController {
         historyValveService.addHistoryValve("","",Config.TInputList,session,request);
 
         session.setAttribute("inputLists", inputLists);
+        session.setAttribute("inputSearchBigtype", bigtypeValue);
+        session.setAttribute("inputSearchMiddletype", middletypeValue);
+        session.setAttribute("inputSearchSmalltype", smalltypeValue);
+        session.setAttribute("inputSearchStartDate", startDate);
+        session.setAttribute("inputSearchEndDate", endDate);
 
         return gson.toJson(inputLists);
 
     }
 
+
+    /**
+     * 入庫データを更新する
+     * */
+    @RequestMapping(value="/updateInput",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String updateInput(@RequestParam("inputDataId")String inputDataId,@RequestParam("tmpInputNum")String tmpInputNum,@RequestParam("tmpInputDiscount")String tmpInputDiscount,@RequestParam("tmpInputDate")String tmpInputDate,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        InputList inputList=new InputList();
+        inputList.setInputListId(Integer.valueOf(inputDataId));
+        inputList.setInputNum(Integer.valueOf(tmpInputNum));
+        inputList.setInputDiscount(Double.valueOf(tmpInputDiscount));
+        inputList.setInputDate(tmpInputDate);
+        inputList=inputService.updateInputdata(inputList);
+
+        //session更新
+        List<InputList> inputLists=( List<InputList>)session.getAttribute("inputLists");
+        List<InputList> inputListsNew=new ArrayList<InputList>();
+        if(inputLists!=null){
+            for(int nIndex=0;nIndex<inputLists.size();nIndex++){
+              if(inputLists.get(nIndex).getInputListId()+""==inputDataId){
+                  inputListsNew.add(inputList);
+              }else{
+                  inputListsNew.add(inputLists.get(nIndex));
+              }
+            }
+        }
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TInputList,session,request);
+
+        session.setAttribute("inputLists", inputListsNew);
+        return "true";
+
+    }
+
+    /**
+     * 入庫データを更新する
+     * */
+    @RequestMapping(value="/deleteInput",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String deleteInput(@RequestParam("inputDataId")String inputDataId,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        InputList inputList=new InputList();
+        inputList.setInputListId(Integer.valueOf(inputDataId));
+        inputService.deteleInputdata(inputList);
+
+        //session更新
+        List<InputList> inputLists=( List<InputList>)session.getAttribute("inputLists");
+        List<InputList> inputListsNew=new ArrayList<InputList>();
+        if(inputLists!=null){
+            for(int nIndex=0;nIndex<inputLists.size();nIndex++){
+                if(inputLists.get(nIndex).getInputListId()+""==inputDataId){
+                    inputListsNew.add(inputList);
+                }else{
+                    inputListsNew.add(inputLists.get(nIndex));
+                }
+            }
+        }
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TInputList,session,request);
+
+        session.setAttribute("inputLists", inputListsNew);
+        return "true";
+
+    }
 
 
 }
