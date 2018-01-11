@@ -11,8 +11,10 @@ import java.util.List;
  */
 public interface GoodsListMapper {
 
-    /**入庫データを抽出する*/
+    /**商品IDからデータを抽出する*/
     public GoodsList findGoodsListById(GoodsList goodsList);
 
+    /**商品バーコードからデータを抽出する*/
+    public GoodsList findGoodsListByBarcode(GoodsList goodsList);
 
 }

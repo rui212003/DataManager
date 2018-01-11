@@ -13,6 +13,11 @@ public class InputList implements Serializable {
     public  int  inputBigtypeId;    //商品大分類
     public  int  inputMiddletypeId;    //商品中分類
     public  int  inputSmalltypeId;    //商品小分類
+
+    public  String  inputBigtypeName;    //商品大分類
+    public  String  inputMiddletypeName;    //商品中分類
+    public  String  inputSmalltypeName;    //商品小分類
+
     public  int  inputNum;   //入庫数量
     public  Double  inputDiscount;   //入庫割引
     public  String  inputDate;   //入庫日付
@@ -67,6 +72,30 @@ public class InputList implements Serializable {
 
     public void setGoodsListId(int goodsListId) {
         this.goodsListId = goodsListId;
+    }
+
+    public String getInputBigtypeName() {
+        return inputBigtypeName;
+    }
+
+    public void setInputBigtypeName(String inputBigtypeName) {
+        this.inputBigtypeName = inputBigtypeName;
+    }
+
+    public String getInputMiddletypeName() {
+        return inputMiddletypeName;
+    }
+
+    public void setInputMiddletypeName(String inputMiddletypeName) {
+        this.inputMiddletypeName = inputMiddletypeName;
+    }
+
+    public String getInputSmalltypeName() {
+        return inputSmalltypeName;
+    }
+
+    public void setInputSmalltypeName(String inputSmalltypeName) {
+        this.inputSmalltypeName = inputSmalltypeName;
     }
 
     public int getInputNum() {

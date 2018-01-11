@@ -8,6 +8,8 @@
         select * from goodsList where outputDelFlg=#{outputDelFlg} and goodsListId=#{goodsListId} limit 1
     </select>
 
-
+    <select id="findGoodsListByBarcode" parameterType="GoodsList" resultType="GoodsList">
+        select * from goodsList where outputDelFlg=#{outputDelFlg} and goodsBarcode=#{goodsBarcode} limit 1
+    </select>
 
 </mapper>

@@ -21,4 +21,12 @@ public interface TypeMapper {
     /**大分類、中分類から小分類を取得*/
     public List<Smalltype> findSmallTypeByBigtype(Smalltype smalltype);
 
+    /**大分類　名称を取得*/
+    public Bigtype findBigTypeByBigtypeId(Bigtype bigtype);
+
+    /**中分類　名称を取得*/
+    public Middletype findMiddleTypeByMiddletypeId(Middletype middletype);
+
+    /**小分類　名称を取得*/
+    public Smalltype findSmallTypeBySmalltypeId(Smalltype smalltype);
 }

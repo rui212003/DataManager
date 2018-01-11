@@ -14,4 +14,16 @@
         select * from smalltype where outputDelFlg=#{outputDelFlg} and bigtypeId=#{bigtypeId} and middletypeId=#{middletypeId}
     </select>
 
+    <select id="findBigTypeByBigtypeId" parameterType="Bigtype" resultType="Bigtype">
+        select * from bigtype where  bigtypeId=#{bigtypeId} limit 1
+    </select>
+
+    <select id="findMiddleTypeByMiddletypeId" parameterType="Middletype" resultType="Middletype">
+        select * from middletype where  middletypeId=#{middletypeId} limit 1
+    </select>
+
+    <select id="findSmallTypeBySmalltypeId" parameterType="Smalltype" resultType="Smalltype">
+        select * from smalltype where  smalltypeId=#{smalltypeId} limit 1
+    </select>
+
 </mapper>

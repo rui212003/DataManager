@@ -35,6 +35,9 @@ public class InputController {
     GoodsListService goodsListService;
 
     @Autowired
+    TypeService typeService;
+
+    @Autowired
     HistoryValveService historyValveService;
 
     /**
@@ -196,6 +199,95 @@ public class InputController {
 
             return "input/inputAdd";
         }
+    }
+
+    /**
+     * ファイルから入庫データを追加する
+     * */
+    @RequestMapping(value="/addInputFile",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String addInputFile(@RequestParam("inputfileName")String inputfileName,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        //追加用
+        List<InputList> inputListNew=new ArrayList<InputList>();
+
+        String tempTrackNum="";
+
+        //Fileから
+        if(inputfileName.length()>0){
+            String[] vids = inputfileName.split("\\r\\n");
+            if(vids.length>0){
+                for(int i = 0;i<vids.length;i++){
+                    String[] inputtemp =vids[i].split("\\t");
+                    if(inputtemp.length==3){
+
+                        if("NW7".equals(inputtemp[2])){
+                        //追跡番号の場合
+                            tempTrackNum=inputtemp[0];
+                        }else{
+                            //商品の場合
+                            InputList inputListTemp=new InputList();
+                            inputListTemp.setInputTrackNum(tempTrackNum);
+                            inputListTemp.setInputDate(inputtemp[1]);
+                            //バーコード番号から商品情報を取得
+
+                            GoodsList goodsList=goodsListService.getGoodsLisByBarcode(inputtemp[0]);
+                            inputListTemp.setGoodsList(goodsList);
+                            inputListTemp.setGoodsListId(goodsList.getGoodsListId());
+
+                            //大分類の文字を取得
+                            Bigtype bittypetemp=typeService.getBigTypeByBigtypeId(goodsList.getGoodsBigtypeId());
+                            inputListTemp.setInputBigtypeName(bittypetemp.getBigtypeName());
+                            inputListTemp.setInputBigtypeId(bittypetemp.getBigtypeId());
+
+                            //中分類の文字を取得
+                            Middletype middletype=typeService.getMiddleTypeBytypeId(goodsList.getGoodsMiddletypeId());
+                            inputListTemp.setInputMiddletypeName(middletype.getMiddletypeName());
+                            inputListTemp.setInputMiddletypeId(middletype.getMiddletypeId());
+
+                            //小分類の文字を取得
+                            Smalltype smalltype=typeService.getSmallTypeBytypeId(goodsList.getGoodsSmalltypeId());
+                            inputListTemp.setInputSmalltypeName(smalltype.getSmalltypeName());
+                            inputListTemp.setInputSmalltypeId(smalltype.getSmalltypeId());
+
+                            //割引を１に設定する
+                            inputListTemp.setInputDiscount(100.0);
+
+                            //数量を1に設定する
+                            inputListTemp.setInputNum(1);
+
+                            inputListNew.add(inputListTemp);
+                        }
+
+                    }
+                }
+            }
+        }
+
+        //DBに保存する
+
+
+
+
+        int inputListNew_num=0;
+        //入庫データに商品情報を追加する
+
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TInputList,session,request);
+
+        session.setAttribute("inputListNew", inputListNew);
+        session.setAttribute("inputListNew_num", inputListNew_num);
+
+        Gson gson=new Gson();
+        return gson.toJson(inputListNew);
+
     }
 
 

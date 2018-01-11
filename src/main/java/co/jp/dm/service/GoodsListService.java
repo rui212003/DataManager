@@ -19,7 +19,7 @@ public class GoodsListService {
     @Resource
     GoodsListMapper goodsListMapper;
 
-    /**入庫データを抽出する*/
+    /**商品IDからデータを抽出する*/
     public GoodsList getGoodsLisById(Integer goodsListId){
         GoodsList goodsLists=new GoodsList();
         goodsLists.setGoodsListId(goodsListId);
@@ -29,5 +29,15 @@ public class GoodsListService {
         return goodsLists;
     }
 
+
+    /**商品バーコードからデータを抽出する*/
+    public GoodsList getGoodsLisByBarcode(String BarcodeNum){
+        GoodsList goodsLists=new GoodsList();
+        goodsLists.setGoodsBarcode(BarcodeNum);
+        goodsLists.setOutputDelFlg("0");
+
+        goodsLists = goodsListMapper.findGoodsListByBarcode(goodsLists);
+        return goodsLists;
+    }
 
 }
