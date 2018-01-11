@@ -27,7 +27,7 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="/DataManager/">入庫一覧</a></li>
-							<li><a href="#">入庫追加</a></li>
+							<li><a href="/DataManager/input/toAddPage">入庫追加</a></li>
 						</ul></li>
 					<!-- 出庫 -->
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">

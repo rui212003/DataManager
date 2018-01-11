@@ -64,6 +64,7 @@ public class InputController {
         List<InputList> inputLists=inputService.getInputList(inputList);
         GoodsList goodsList=new GoodsList();
 
+        int inputSearchData_num=0;
         //入庫データに商品情報を追加する
         if(inputLists!=null){
             for(int nIndex=0;nIndex<inputLists.size();nIndex++){
@@ -71,6 +72,7 @@ public class InputController {
                 goodsList=goodsListTemp;
                 inputLists.get(nIndex).setGoodsList(goodsListTemp);
             }
+            inputSearchData_num=inputLists.size();
         }
 
 
@@ -83,6 +85,7 @@ public class InputController {
         session.setAttribute("inputSearchSmalltype", smalltypeValue);
         session.setAttribute("inputSearchStartDate", startDate);
         session.setAttribute("inputSearchEndDate", endDate);
+        session.setAttribute("inputSearchData_num", inputSearchData_num);
 
         return gson.toJson(inputLists);
 
@@ -160,12 +163,39 @@ public class InputController {
             }
         }
 
+        int inputSearchData_num=0;
+        if(inputListsNew!=null){
+            inputSearchData_num=inputListsNew.size();
+        }
+
         //historyテーブルを更新
         historyValveService.addHistoryValve("","",Config.TInputList,session,request);
 
         session.setAttribute("inputLists", inputListsNew);
+        session.setAttribute("inputSearchData_num", inputSearchData_num);
         return "true";
 
+    }
+
+
+    /**
+     * 入庫追加ページへ遷移します
+     * */
+    @RequestMapping(value="/toAddPage", method=RequestMethod.GET , produces = "text/html;charset=UTF-8")
+    public String toAddPage(HttpSession session,HttpServletRequest request){
+
+        //
+        User user = (User) session.getAttribute("user");
+        if(user == null){
+            return Config.LoginSession;
+        } else {
+
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve("","",Config.TLogin,session,request);
+
+            return "input/inputAdd";
+        }
     }
 
 

@@ -83,6 +83,9 @@
                                     <input type="button" id="master-location-confirm" class="btn btn-block btn-success"
                                            onclick="searchInputData()" value="検索">
                                 </div>
+                                <div class="col-md-2">
+                                    <span id="inputData_num" class="inputData_num " STYLE="font-size: 16px;">合計 ${inputSearchData_num} 件</span>
+                                </div>
                             </div>
 
                         </form>
@@ -90,7 +93,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <table class="table table-hover valve-table">
+                            <table class="tablesorter table table-hover valve-table" id="inputDataList">
                                 <thead>
                                 <tr>
                                     <th>No</th>
@@ -138,8 +141,26 @@
 <!-- ./wrapper -->
 
 <!-- add new calendar event modal -->
+<!-- ====================== -->
+<!-- MediaTableのスクリプト -->
+<!-- ====================== -->
+<script type="text/javascript">
+    $(document).ready(function() {
+//                $("#inputDataList").tablesorter();
+                $("#inputDataList").tablesorter({
+                    headers: {
+                        3: { sorter: false },
+                        6: { sorter: false },
+                        7: { sorter: false }
+                    }
+                });
+            }
+
+    );
+</script>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
         //The Calender
         $('#sandbox-container .input-daterange').datepicker({
@@ -263,8 +284,6 @@
                     '<td> <input class="tdwidth50" type="number" placeholder="数量"  name="'+inputNumId+'"  id="'+inputNumId+'" value="' + items[i].inputNum + '"/></td>' +
                     '<td>' + items[i].goodsList.goodsUnitName + '</td>' +
                     '<td>' + items[i].goodsList.goodsPriceJP + '</td>' +
-                    '<td>' + items[i].inputDiscount + '</td>' +
-                    '<td>' + items[i].inputDate + '</td>' +
                     '<td> <input class="tdwidth50" type="number" placeholder="折扣"  name="'+inputDiscountId+'"  id="'+inputDiscountId+'" value="' + items[i].inputDiscount + '"/></td>' +
                     '<td> <input class="tdwidth120" type="text" placeholder="入庫日付"  name="'+inputDateId+'"  id="'+inputDateId+'" value="' + items[i].inputDate + '"/></td>' +
                     '<td>' + items[i].inputTrackNum + '</td>' +
@@ -275,10 +294,16 @@
                     '</tr>';
         }
         $("#inputData").html(htmlContent);
+        $('#inputData_num').text('合計 '+items.length+" 件");
+        $("#inputDataList").trigger("update");
     }
 
     //入庫検索
     function searchInputData() {
+
+        //検索結果リストを空にする
+        $("#inputData").html("");
+
         //キーワード
         var bigtypeValue = $("[name=big_type]").val();
         var middletypeValue = $("[name=middle_type]").val();

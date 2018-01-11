@@ -27,6 +27,8 @@
 <link href="/DataManager/css/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
 <%--<!-- Daterange picker -->--%>
 <link href="/DataManager/css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+    <!--テーブルそっと用-->
+<link href="/DataManager/js/themes/blue/style.css" rel="stylesheet" type="text/css" media="print, projection, screen" />
 
 <!--     <link href="/DataManagement/html/css/html.css" rel="stylesheet" type="text/css" /> -->
 
@@ -48,6 +50,9 @@
 <script src="/DataManager/js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
 <script src="/DataManager/js/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="/DataManager/js/plugins/datepicker/locales/bootstrap-datepicker.ja.js" type="text/javascript"></script>
+<!--テーブルそっと用-->
+<%--<script src="/DataManager/js/jquery-latest.js" type="text/javascript"></script>--%>
+<script src="/DataManager/js/jquery.tablesorter.min.js" type="text/javascript"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="/DataManager/js/bootstrap.min.js"></script>
 <script src="/DataManager/js/jQueryRotate.js" type="text/javascript"></script>
