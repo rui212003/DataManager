@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="co.jp.dm.dao.InputMapper">
 
-
-
     <select id="findInputList" parameterType="InputList" resultType="InputList">
         select * from inputList where inputDelFlg=#{inputDelFlg} and inputBigtypeId=#{inputBigtypeId} and inputMiddletypeId=#{inputMiddletypeId} and inputSmalltypeId=#{inputSmalltypeId} and inputDate>=#{trkDate}  and #{updDate}>=inputDate
     </select>
@@ -31,5 +29,13 @@
         where
         inputListId=#{inputListId}
     </update>
+
+    <insert id="batchInsertInputData" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="inputListId">
+        INSERT INTO inputList (goodsListId,inputBigtypeId,inputMiddletypeId,inputSmalltypeId,inputNum,inputDiscount,inputDate,inputTrackNum,warehouseId,inputDelFlg,trkDate,updDate)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.goodsListId},#{item.inputBigtypeId},#{item.inputMiddletypeId},#{item.inputSmalltypeId},#{item.inputNum},#{item.inputDiscount},#{item.inputDate},#{item.inputTrackNum},#{item.warehouseId},#{item.inputDelFlg},#{item.trkDate},#{item.updDate})
+        </foreach>
+    </insert>
 
 </mapper>

@@ -25,4 +25,7 @@ public interface InputMapper {
     /**入庫データを削除する*/
     public void deleteInputData(InputList inputList);
 
+    /**入庫データを追加する*/
+    public void batchInsertInputData( List<InputList> inputLists);
+
 }

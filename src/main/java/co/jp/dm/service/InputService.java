@@ -35,8 +35,8 @@ public class InputService {
 
         //append Date
         Date date = new Date();
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 
         inputList.setUpdDate(sdf1.format(date));
         inputMapper.updateInputData(inputList);
@@ -51,12 +51,25 @@ public class InputService {
 
         //append Date
         Date date = new Date();
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 
         inputList.setInputDelFlg("1");
         inputList.setUpdDate(sdf1.format(date));
         inputMapper.deleteInputData(inputList);
+    }
+
+    /**入庫データを削除する*/
+    public List<InputList> insertInputDataByLists(List<InputList> inputLists){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        inputMapper.batchInsertInputData(inputLists);
+
+        return  inputLists;
     }
 
 }

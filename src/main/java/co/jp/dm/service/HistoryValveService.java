@@ -43,7 +43,7 @@ public class HistoryValveService {
 
             //append Date
             Date date = new Date();
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             historyValve.sethTrkDate(sdf1.format(date));
             System.out.println("作業データ="+ sdf1.format(date));
 
@@ -67,7 +67,7 @@ public class HistoryValveService {
 
         //append Date
         Date date = new Date();
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd");
         historyValve.sethTrkDate(sdf1.format(date));
         System.out.println("time="+sdf1.format(date));
 

@@ -102,15 +102,31 @@
 //                    $("#output").val(reader.result);
 
                     //ファイルをサーバに送る
-                    $.post("/DataManager/input/addInputFile", {"inputfileName": reader.result}, function (data) {
-                        if (data == "login") {
-                            logoutFun();
-                        }
-                        var items = JSON.parse(data);
-                        makeUpGoodsType(items);
-                    });
+//                    $.post("/DataManager/input/addInputFile", {"inputfileName": reader.result}, function (data) {
+//                        if (data == "login") {
+//                            logoutFun();
+//                        }
+//                        var items = JSON.parse(data);
+//                        makeUpGoodsType(items);
+//                    });
+                    var inputfileName=reader.result;
 
-                })
+                    $.ajax({
+                         url : "/DataManager/input/addInputFile",
+                         type: "POST",
+                         data: { "inputfileName": inputfileName},
+                         async:false,
+                          success : function(data) {
+                             if (data.success) {
+                                 alert("エラー");
+                             } else {
+                                 var items = JSON.parse(data);
+                                 makeUpGoodsType(items);
+                                 alert("DBに保存しました");
+                             }
+                            }
+                        });
+        })
 
             });
 		});
@@ -140,7 +156,7 @@
                         '<td>' + items[i].goodsList.goodsUnitName + '</td>' +
                         '<td>' + items[i].goodsList.goodsPriceJP + '</td>' +
                         '<td> <input class="tdwidth50" type="number" placeholder="折扣"  name="'+inputDiscountId+'"  id="'+inputDiscountId+'" value="' + items[i].inputDiscount + '"/></td>' +
-                        '<td>' + items[i].inputDate + '</td>' +
+                        '<td> <input class="tdwidth120" type="text" placeholder="入荷日"  name="'+inputDateId+'"  id="'+inputDateId+'" value="' + items[i].inputDate + '"/></td>' +
                         '<td> <input class="tdwidth120" type="text" placeholder="追跡番号"  name="'+inputTrackNumId+'"  id="'+inputTrackNumId+'" value="' + items[i].inputTrackNum + '"/></td>' +
                         '<td>' +
                         '<button onclick="updateInput(' + items[i].inputListId + ')" class="btn btn-primary operation-button-btn">更新</button>&nbsp;&nbsp;&nbsp;'+
@@ -156,3 +172,53 @@
 
 </body>
 </html>
+
+<script type="text/javascript">
+
+
+    //入庫修正
+    function updateInput(obj) {
+        //キーワード
+        console.log("inputDataId  Id="+ obj);
+        var inputDataId=obj;
+        var tmpInputNum=document.getElementById("inputNum-"+inputDataId).value;
+        var tmpInputDiscount=document.getElementById("inputDiscount-"+inputDataId).value;
+        var tmpInputDate=document.getElementById("inputDate-"+inputDataId).value;
+
+        //大分類を選択しなかった場合は、検索しない
+        if (tmpInputNum == "0" || tmpInputNum == "") {
+            alert("数量は０より大きい数字を入力してください")
+            return false;
+        } else if (tmpInputDiscount<=0 || tmpInputDiscount>100) {
+            alert("割引は１－１００間の数字を入力してください")
+            return false;
+        } else if (isDate(tmpInputDate)) {
+            alert("日付をyyyy-mm-dd HH:MM:SS のように正しく入力してください")
+            return false;
+        } else {
+            $.post("/DataManager/input/updateInput", {"inputDataId": inputDataId,"tmpInputNum": tmpInputNum, "tmpInputDiscount": tmpInputDiscount, "tmpInputDate": tmpInputDate}, function (data) {
+                if (data == "login") {
+                    logoutFun();
+                }
+            });
+        }
+    }
+
+    //入庫削除
+    function deleteInput(obj) {
+        //キーワード
+        console.log("inoutDate  Id="+ obj);
+        var inputDataId=obj;
+        if (!confirm("この行を削除しますか？"))
+            return;
+        $.post("/DataManager/input/deleteInput", {"inputDataId": inputDataId}, function (data) {
+            if (data == "login") {
+                logoutFun();
+            }
+
+            searchInputData();
+        });
+
+
+    }
+</script>

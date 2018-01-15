@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -261,6 +263,16 @@ public class InputController {
 
                             //数量を1に設定する
                             inputListTemp.setInputNum(1);
+                            //削除フラグを0に設定する
+                            inputListTemp.setInputDelFlg("0");
+                            //倉庫を設定する
+
+                            //append Date
+                            Date date = new Date();
+                            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                            inputListTemp.setTrkDate(sdf1.format(date));
+                            inputListTemp.setUpdDate(sdf1.format(date));
 
                             inputListNew.add(inputListTemp);
                         }
@@ -272,6 +284,7 @@ public class InputController {
 
         //DBに保存する
 
+        inputListNew=inputService.insertInputDataByLists(inputListNew);
 
 
 
@@ -286,7 +299,12 @@ public class InputController {
         session.setAttribute("inputListNew_num", inputListNew_num);
 
         Gson gson=new Gson();
-        return gson.toJson(inputListNew);
+        if(inputListNew!=null){
+            return gson.toJson(inputListNew);
+        }else{
+            return "true";
+        }
+
 
     }
 
