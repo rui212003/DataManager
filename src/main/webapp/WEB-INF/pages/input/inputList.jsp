@@ -197,7 +197,7 @@
             $("#middle_type").val("");
             $("#small_type").val("");
             console.log("bittypeValue=" + bigtypeValue);
-            $.post("/DataManager/type/getMiddleTypeByBigType", {"bigtypeValue": bigtypeValue}, function (data) {
+            $.post("/DataManager/type/getMiddleTypeByBigType", {"outInput": "1","bigtypeValue": bigtypeValue}, function (data) {
                 if (data == "login") {
                     logoutFun();
                 }
@@ -209,7 +209,7 @@
                 var middletypeValue = $("[name=middle_type]").val();
                 //sessionに保存
                 console.log("middletypeValue=" + middletypeValue);
-                $.post("/DataManager/type/getSmallTypeByBigType", {"bigtypeValue": bigtypeValue, "middletypeValue": middletypeValue}, function (data) {
+                $.post("/DataManager/type/getSmallTypeByBigType", {"outInput": "1","bigtypeValue": bigtypeValue, "middletypeValue": middletypeValue}, function (data) {
                     if (data == "login") {
                         logoutFun();
                     }
@@ -228,7 +228,7 @@
             //設定
             $("#small_type").val("");
             console.log("middletypeValue=" + middletypeValue);
-            $.post("/DataManager/type/getSmallTypeByBigType", {"bigtypeValue": bigtypeValue, "middletypeValue": middletypeValue}, function (data) {
+            $.post("/DataManager/type/getSmallTypeByBigType", {"outInput": "1","bigtypeValue": bigtypeValue, "middletypeValue": middletypeValue}, function (data) {
                 if (data == "login") {
                     logoutFun();
                 }

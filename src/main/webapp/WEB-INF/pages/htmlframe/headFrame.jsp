@@ -34,8 +34,8 @@
 							出庫管理<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">出庫一覧</a></li>
-							<li><a href="#">出庫追加</a></li>
+							<li><a href="/DataManager/output/toOutputList">出庫一覧</a></li>
+							<li><a href="/DataManager/output/toAddPage">出庫追加</a></li>
 						</ul></li>
 					<!-- 在庫 -->
 					<li><a href="#">在庫管理</a></li>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.jp.dm.dao.OutputMapper">
+
+    <select id="findOutputList" parameterType="OutputList" resultType="OutputList">
+        select * from outputList where outputDelFlg=#{outputDelFlg} and outputBigtypeId=#{outputBigtypeId} and outputMiddletypeId=#{outputMiddletypeId} and outputSmalltypeId=#{outputSmalltypeId} and outputDate>=#{trkDate}  and #{updDate}>=outputDate
+    </select>
+
+    <select id="findOutputListById" parameterType="OutputList" resultType="OutputList">
+        select * from outputList where outputDelFlg=#{outputDelFlg} and outputListId=#{outputListId}
+    </select>
+
+    <update id="updateOutputData" parameterType="OutputList">
+        UPDATE outputList
+        SET
+        outputNum=#{outputNum},
+        outputDiscount=#{outputDiscount},
+        outputDate=#{outputDate},
+        updDate=#{updDate}
+        where
+        outputListId=#{outputListId}
+    </update>
+
+    <update id="deleteOutputData" parameterType="OutputList">
+        UPDATE outputList
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        outputListId=#{outputListId}
+    </update>
+
+    <insert id="batchInsertOutputData" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="outputListId">
+        INSERT INTO outputList (goodsListId,outputBigtypeId,outputMiddletypeId,outputSmalltypeId,outputNum,outputDiscount,outputDate,outputTrackNum,warehouseId,outputDelFlg,trkDate,updDate)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.goodsListId},#{item.outputBigtypeId},#{item.outputMiddletypeId},#{item.outputSmalltypeId},#{item.outputNum},#{item.outputDiscount},#{item.outputDate},#{item.outputTrackNum},#{item.warehouseId},#{item.outputDelFlg},#{item.trkDate},#{item.updDate})
+        </foreach>
+    </insert>
+
+</mapper>

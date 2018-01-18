@@ -40,7 +40,7 @@ public class TypeController {
      * */
     @RequestMapping(value="/getMiddleTypeByBigType",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String getMiddleTypeByBigType(@RequestParam("bigtypeValue")String bigtypeValue,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+    public String getMiddleTypeByBigType(@RequestParam("outInput")String outInput,@RequestParam("bigtypeValue")String bigtypeValue,ModelMap modelMap,HttpSession session,HttpServletRequest request){
         //session　check
         User user=(User)session.getAttribute("user");
         if(user == null){
@@ -55,9 +55,18 @@ public class TypeController {
         //historyテーブルを更新
         historyValveService.addHistoryValve("","",Config.TMiddletype,session,request);
 
-        session.setAttribute("middletypeList", middletypeList);
+        if("1".equals(outInput)){
+            //inputページ場合
+            session.setAttribute("middletypeList", middletypeList);
 
-        return gson.toJson(middletypeList);
+            return gson.toJson(middletypeList);
+        }else{
+            //outputページ場合
+            session.setAttribute("outputmiddletypeList", middletypeList);
+
+            return gson.toJson(middletypeList);
+        }
+
 
     }
 
@@ -66,7 +75,7 @@ public class TypeController {
      * */
     @RequestMapping(value="/getSmallTypeByBigType",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
-    public String getSmallTypeByBigType(@RequestParam("bigtypeValue")String bigtypeValue,@RequestParam("middletypeValue")String middletypeValue,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+    public String getSmallTypeByBigType(@RequestParam("outInput")String outInput,@RequestParam("bigtypeValue")String bigtypeValue,@RequestParam("middletypeValue")String middletypeValue,ModelMap modelMap,HttpSession session,HttpServletRequest request){
         //session　check
         User user=(User)session.getAttribute("user");
         if(user == null){
@@ -81,9 +90,17 @@ public class TypeController {
         //historyテーブルを更新
         historyValveService.addHistoryValve("","",Config.TSmalltype,session,request);
 
-        session.setAttribute("smalltypeList", smalltypeList);
+        if("1".equals(outInput)){
+            //inputページ場合
+            session.setAttribute("smalltypeList", smalltypeList);
 
-        return gson.toJson(smalltypeList);
+            return gson.toJson(smalltypeList);
+        }else{
+            //outputページ場合
+            session.setAttribute("outputsmalltypeList", smalltypeList);
+
+            return gson.toJson(smalltypeList);
+        }
 
     }
 
