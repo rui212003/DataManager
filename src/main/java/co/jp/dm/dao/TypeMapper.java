@@ -2,6 +2,7 @@ package co.jp.dm.dao;
 
 
 import co.jp.dm.entity.Bigtype;
+import co.jp.dm.entity.GoodsUnit;
 import co.jp.dm.entity.Middletype;
 import co.jp.dm.entity.Smalltype;
 
@@ -14,6 +15,9 @@ public interface TypeMapper {
 
     /**大分類を取得*/
     public List<Bigtype> findAllBigtype();
+
+    /**商品単位を取得*/
+    public List<GoodsUnit> findAllGoodsUnit();
 
     /**大分類から中分類を取得*/
     public List<Middletype> findMiddleTypeByBigtype(Middletype middletype);
@@ -29,4 +33,19 @@ public interface TypeMapper {
 
     /**小分類　名称を取得*/
     public Smalltype findSmallTypeBySmalltypeId(Smalltype smalltype);
+
+    /**大分類　を更新する*/
+    public void updateBigtypeDateBybigtype(Bigtype bigtype);
+
+    /**大分類　を削除する*/
+    public void deleteBigTypeByBigtype(Bigtype bigtype);
+
+
+    /**大分類　を追加する*/
+    public void insertBigType(Bigtype bigtype);
+
+    /**大分類ID　を取得する*/
+    public int getLastInsertBigTypeId();
+
+
 }

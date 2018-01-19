@@ -6,6 +6,10 @@
         select * from bigtype where outputDelFlg=0
     </select>
 
+    <select id="findAllGoodsUnit"  resultType="GoodsUnit">
+        select * from goodsUnit where outputDelFlg=0
+    </select>
+
     <select id="findMiddleTypeByBigtype" parameterType="Middletype" resultType="Middletype">
         select * from middletype where outputDelFlg=#{outputDelFlg} and bigtypeId=#{bigtypeId}
     </select>
@@ -24,6 +28,40 @@
 
     <select id="findSmallTypeBySmalltypeId" parameterType="Smalltype" resultType="Smalltype">
         select * from smalltype where  smalltypeId=#{smalltypeId} limit 1
+    </select>
+
+
+    <update id="updateBigtypeDateBybigtype" parameterType="Bigtype">
+        UPDATE bigtype
+        SET
+        bigtypeName=#{bigtypeName},
+        updDate=#{updDate}
+        where
+        bigtypeId=#{bigtypeId}
+    </update>
+
+    <update id="deleteBigTypeByBigtype" parameterType="Bigtype">
+        UPDATE bigtype
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        bigtypeId=#{bigtypeId}
+    </update>
+
+    <insert id="insertBigType" parameterType="Bigtype">
+        insert into
+        bigtype(bigtypeName, outputDelFlg,trkDate, updDate)
+        values(
+        #{bigtypeName},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertBigTypeId" resultType="int">
+        select bigtypeId from bigtype ORDER BY bigtypeId DESC limit 1
     </select>
 
 </mapper>
