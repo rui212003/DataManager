@@ -193,6 +193,60 @@ public class TypeService {
         return middletype;
     }
 
+    //***************************************
+    //                 小分類
+    //***************************************
+
+    /**小分類を修正する*/
+    public Smalltype updateSmalltypeData(Smalltype smalltype){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        smalltype.setUpdDate(sdf1.format(date));
+
+        typeMapper.updateSmalltypeDateBySmalltype(smalltype);
+        smalltype = typeMapper.findSmallTypeBySmalltypeId(smalltype);
+        return smalltype;
+    }
+
+    /**小分類を削除する*/
+    public void deleteSmalltypeData(Smalltype smalltype){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        smalltype.setUpdDate(sdf1.format(date));
+        smalltype.setOutputDelFlg("1");
+        typeMapper.deleteSmallTypeBySmalltype(smalltype);
+
+    }
+
+    /**小分類を追加する*/
+    public Smalltype addSmalltype(Smalltype smalltype){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+
+        smalltype.setUpdDate(sdf1.format(date));
+        smalltype.setTrkDate(sdf1.format(date));
+        smalltype.setOutputDelFlg("0");
+        smalltype.setSmalltypeName("");
+
+
+        typeMapper.insertSmallType(smalltype);
+        int tempId=typeMapper.getLastInsertSmallTypeId();
+        smalltype.setSmalltypeId(tempId);
+        return smalltype;
+    }
+
 
     //*******************************************
     //               単位部分

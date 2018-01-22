@@ -397,6 +397,129 @@ public class TypeController {
 
 
 
+    //*******************************************
+    //               小分類
+    //*******************************************
+
+    /**
+     * 小分類データを更新する
+     * */
+    @RequestMapping(value="/updateSmalltypeName",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String updateSmalltypeName(@RequestParam("smalltypeId")String smalltypeId,@RequestParam("tmpsmalltypeName")String tmpsmalltypeName,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Smalltype smalltype=new Smalltype();
+        smalltype.setSmalltypeId(Integer.valueOf(smalltypeId));
+        smalltype.setSmalltypeName(tmpsmalltypeName);
+        smalltype=typeService.updateSmalltypeData(smalltype);
+
+        //session更新
+        List<Smalltype> smalltypeList=( List<Smalltype>)session.getAttribute("masterSmalltypeList");
+        List<Smalltype> smalltypeListNew=new ArrayList<Smalltype>();
+        if(smalltypeList!=null){
+            for(int nIndex=0;nIndex<smalltypeList.size();nIndex++){
+                String temp=smalltypeList.get(nIndex).getSmalltypeId()+"";
+                if(smalltypeId.equals(temp)){
+                    smalltypeListNew.add(smalltype);
+                }else{
+                    smalltypeListNew.add(smalltypeList.get(nIndex));
+                }
+            }
+        }
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TSmalltype,session,request);
+
+        session.setAttribute("masterSmalltypeList", smalltypeListNew);
+        return "true";
+
+    }
+
+    /**
+     * 小分類データを更新する
+     * */
+    @RequestMapping(value="/deleteSmalltypeName",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String deleteSmalltypeName(@RequestParam("smalltypeId")String smalltypeId,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Smalltype smalltype=new Smalltype();
+        smalltype.setSmalltypeId(Integer.valueOf(smalltypeId));
+        typeService.deleteSmalltypeData(smalltype);
+
+
+        //session更新
+        List<Smalltype> smalltypeList=( List<Smalltype>)session.getAttribute("masterSmalltypeList");
+        List<Smalltype> smalltypeListNew=new ArrayList<Smalltype>();
+        if(smalltypeList!=null){
+            for(int nIndex=0;nIndex<smalltypeList.size();nIndex++){
+                String temp=smalltypeList.get(nIndex).getSmalltypeId()+"";
+                if(smalltypeId.equals(temp)){
+                    System.out.println("eee");
+                }else{
+                    smalltypeListNew.add(smalltypeList.get(nIndex));
+                }
+            }
+        }
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TSmalltype,session,request);
+
+        session.setAttribute("masterSmalltypeList", smalltypeListNew);
+        Gson gson=new Gson();
+
+        return gson.toJson(smalltypeListNew);
+
+    }
+
+
+    /**
+     * 小分類データを追加する
+     * */
+    @RequestMapping(value="/addSmalltype",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String addSmalltype(@RequestParam("bigtypeId")String bigtypeId,@RequestParam("middletypeId")String middletypeId,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Smalltype smalltype=new Smalltype();
+        smalltype.setBigtypeId(Integer.valueOf(bigtypeId));
+        smalltype.setMiddletypeId(Integer.valueOf(middletypeId));
+
+        typeService.addSmalltype(smalltype);
+
+
+        List<Smalltype> smalltypeList=typeService.getSmallTypeByBigType(bigtypeId,middletypeId);
+        session.setAttribute("masterSmalltypeList", smalltypeList);
+        modelMap.addAttribute("masterSmalltypeList",smalltypeList);
+
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TSmalltype,session,request);
+
+        Gson gson=new Gson();
+
+        return gson.toJson(smalltypeList);
+
+    }
+
+
+
 
 
 

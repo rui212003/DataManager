@@ -70,6 +70,23 @@ public interface TypeMapper {
     public int getLastInsertMiddleTypeId();
 
     //*******************************************
+    //***************小分類**********************
+    //*******************************************
+
+
+    /**小分類　を更新する*/
+    public void updateSmalltypeDateBySmalltype(Smalltype smalltype);
+
+    /**小分類　を削除する*/
+    public void deleteSmallTypeBySmalltype(Smalltype smalltype);
+
+    /**小分類　を追加する*/
+    public void insertSmallType(Smalltype smalltype);
+
+    /**小分類ID　を取得する*/
+    public int getLastInsertSmallTypeId();
+
+    //*******************************************
     //***************　単位 **********************
     //*******************************************
 

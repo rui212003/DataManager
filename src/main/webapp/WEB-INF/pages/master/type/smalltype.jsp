@@ -49,9 +49,7 @@
 								</div>
 								<div class="col-md-2">
                                     <select name="middle_type" id="middle_type" style="width: 200px">
-                                        <c:forEach items="${mastermiddletypeList}" var="tempMiddletype">
-                                            <option value="${tempMiddletype.middletypeId}">${tempMiddletype.middletypeName}</option>
-                                        </c:forEach>
+                                        <option value="0">中分類</option>
                                     </select>
 								</div>
 								<span STYLE="color: red;">※大分類、中分類を選択してください</span>
@@ -61,7 +59,7 @@
 
 						<div class="tab-content">
 							<div class="col-md-2">
-								<input type="button" class="btn btn-block btn-success" value="新規追加">
+								<input type="button" class="btn btn-block btn-success" onclick="addSmalltype()" value="新規追加">
 							</div>
 						</div>
 						<div class="tab-content">
@@ -70,13 +68,11 @@
 									<thead>
 										<tr>
 											<th>No</th>
-											<th>大分類</th>
-											<th>中分類</th>
 											<th>小分類</th>
 											<th>操作</th>
 										</tr>
 									</thead>
-									<tbody id="inputData">
+									<tbody id="smallTypeData">
 									</tbody>
 								</table>
 							</div>
@@ -98,7 +94,139 @@
 		$(document).ready(function() {
 
 		});
-	</script>
+
+        //大分類により中分類を取得
+        $("#big_type").change(function () {
+            var bigtypeValue = $("[name=big_type]").val();
+            if ("0"==bigtypeValue) {
+                bigtypeValue = "";
+                alert("大分類を選択してください");
+            }else{
+                //設定
+                $("#middle_type").val("");
+                console.log("bittypeValue=" + bigtypeValue);
+                $.post("/DataManager/type/getMiddleTypeByBigType", {"outInput": "4","bigtypeValue": bigtypeValue}, function (data) {
+                    if (data == "login") {
+                        logoutFun();
+                    }
+                    var items = JSON.parse(data);
+
+                    $("#middle_type").html("");
+                    var htmlContent = "<option value='0'>中分類</option>";
+                    for (var i = 0; i < items.length; i++) {
+                        htmlContent =
+                                htmlContent + '' +
+                                '<option value=' + items[i].middletypeId + '>' + items[i].middletypeName + '</option>'
+                    }
+                    $("#middle_type").html(htmlContent);
+
+                });
+            }
+
+        });
+
+        //中分類により小分類を取得
+        $("#middle_type").change(function () {
+            var bigtypeValue = $("[name=big_type]").val();
+            var middletypeValue = $("[name=middle_type]").val();
+            if ("0"==bigtypeValue ||"0"==middletypeValue) {
+                bigtypeValue = "";
+                alert("大分類と中分類を選択してください");
+            }else{
+                //設定
+                $("#smallTypeData").val("");
+
+                $.post("/DataManager/type/getSmallTypeByBigType", {"outInput": "3","bigtypeValue": bigtypeValue,"middletypeValue": middletypeValue}, function (data) {
+                    if (data == "login") {
+                        logoutFun();
+                    }
+                    var items = JSON.parse(data);
+                    makeSmallType(items);
+
+                });
+            }
+
+        });
+
+        //小分類リストを取得
+        function makeSmallType(items) {
+
+            $("#smallTypeData").html("");
+            var htmlContent = "";
+            for (var i = 0; i < items.length; i++) {
+
+                var smalltypeName="smalltypeName-"+items[i].smalltypeId;
+
+                htmlContent =
+                        htmlContent + '' +
+                        '<tr id="' + items[i].smalltypeId + '">' +
+                        '<td>' + (i + 1) + '</td>' +
+                        '<td> <input class="tdwidth120" type="text" placeholder="小分類名"  name="'+smalltypeName+'"  id="'+smalltypeName+'" value="' + items[i].smalltypeName + '"/></td>' +
+                        '<td>' +
+                        '<button onclick="updateSmalltype(' + items[i].smalltypeId + ')" class="btn btn-primary operation-button-btn">更新</button>&nbsp;&nbsp;&nbsp;'+
+                        '<button onclick="deleteSmalltype(' + items[i].smalltypeId + ')" class="btn btn-danger operation-button-btn">削除</button>'
+                '</td>' +
+                '</tr>';
+            }
+            $("#smallTypeData").html(htmlContent);
+        }
+
+        //小分類修正
+        function updateSmalltype(obj) {
+            //キーワード
+            var smalltypeId=obj;
+            var tmpsmalltypeName=document.getElementById("smalltypeName-"+smalltypeId).value;
+
+            //小分類を修正
+            $.post("/DataManager/type/updateSmalltypeName", {"smalltypeId": smalltypeId,"tmpsmalltypeName": tmpsmalltypeName}, function (data) {
+                if (data == "login") {
+                    logoutFun();
+                }
+            });
+        }
+
+        //小分類削除
+        function deleteSmalltype(obj) {
+            //キーワード
+
+            var smalltypeId=obj;
+
+            if (!confirm("この行を削除しますか？"))
+
+                return;
+            $.post("/DataManager/type/deleteSmalltypeName", {"smalltypeId": smalltypeId}, function (data) {
+                if (data == "login") {
+                    logoutFun();
+                }
+                var items = JSON.parse(data);
+                makeSmallType(items);
+            });
+        }
+
+        //小分類を追加する
+        function addSmalltype() {
+            var bigtypeValue = $("[name=big_type]").val();
+            var middletypeValue = $("[name=middle_type]").val();
+
+            if ("0"==bigtypeValue ||"0"==middletypeValue) {
+                bigtypeValue = "";
+                alert("大分類と中分類を選択してください");
+            }else{
+                //小分類を追加する
+                $.post("/DataManager/type/addSmalltype", {"bigtypeId": bigtypeValue,"middletypeId": middletypeValue}, function (data) {
+                    if (data == "login") {
+                        logoutFun();
+                    }
+
+                    var items = JSON.parse(data);
+                    makeSmallType(items);
+                });
+            }
+
+
+        }
+
+    </script>
 
 </body>
 </html>

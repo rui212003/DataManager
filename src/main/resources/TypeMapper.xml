@@ -102,6 +102,44 @@
 
 
 
+    <update id="updateSmalltypeDateBySmalltype" parameterType="Smalltype">
+        UPDATE smalltype
+        SET
+        smalltypeName=#{smalltypeName},
+        updDate=#{updDate}
+        where
+        smalltypeId=#{smalltypeId}
+    </update>
+
+    <update id="deleteSmallTypeBySmalltype" parameterType="Smalltype">
+        UPDATE smalltype
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        smalltypeId=#{smalltypeId}
+    </update>
+
+    <insert id="insertSmallType" parameterType="Smalltype">
+        insert into
+        smalltype(bigtypeId,middletypeId,smalltypeName, outputDelFlg,trkDate, updDate)
+        values(
+        #{bigtypeId},
+        #{middletypeId},
+        #{smalltypeName},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertSmallTypeId" resultType="int">
+        select smalltypeId from smalltype ORDER BY smalltypeId DESC limit 1
+    </select>
+
+
+
+
 
 
     <select id="findAllGoodsUnit"  resultType="GoodsUnit">
