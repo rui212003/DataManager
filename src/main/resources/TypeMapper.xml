@@ -6,10 +6,6 @@
         select * from bigtype where outputDelFlg=0
     </select>
 
-    <select id="findAllGoodsUnit"  resultType="GoodsUnit">
-        select * from goodsUnit where outputDelFlg=0
-    </select>
-
     <select id="findMiddleTypeByBigtype" parameterType="Middletype" resultType="Middletype">
         select * from middletype where outputDelFlg=#{outputDelFlg} and bigtypeId=#{bigtypeId}
     </select>
@@ -29,6 +25,8 @@
     <select id="findSmallTypeBySmalltypeId" parameterType="Smalltype" resultType="Smalltype">
         select * from smalltype where  smalltypeId=#{smalltypeId} limit 1
     </select>
+
+
 
 
     <update id="updateBigtypeDateBybigtype" parameterType="Bigtype">
@@ -62,6 +60,89 @@
 
     <select id="getLastInsertBigTypeId" resultType="int">
         select bigtypeId from bigtype ORDER BY bigtypeId DESC limit 1
+    </select>
+
+
+
+
+    <update id="updateMiddletypeDateByMiddletype" parameterType="Middletype">
+        UPDATE middletype
+        SET
+        middletypeName=#{middletypeName},
+        updDate=#{updDate}
+        where
+        middletypeId=#{middletypeId}
+    </update>
+
+    <update id="deleteMiddleTypeByMiddletype" parameterType="Middletype">
+        UPDATE middletype
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        middletypeId=#{middletypeId}
+    </update>
+
+    <insert id="insertMiddleType" parameterType="Middletype">
+        insert into
+        middletype(bigtypeId,middletypeName, outputDelFlg,trkDate, updDate)
+        values(
+        #{bigtypeId},
+        #{middletypeName},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertMiddleTypeId" resultType="int">
+        select middletypeId from middletype ORDER BY middletypeId DESC limit 1
+    </select>
+
+
+
+
+
+
+    <select id="findAllGoodsUnit"  resultType="GoodsUnit">
+        select * from goodsUnit where outputDelFlg=0
+    </select>
+
+    <select id="findGoodUnitByGoodUnitId" parameterType="GoodsUnit" resultType="GoodsUnit">
+        select * from goodsUnit where  goodsUnitId=#{goodsUnitId} limit 1
+    </select>
+
+    <update id="updateGoodsUnit" parameterType="GoodsUnit">
+        UPDATE goodsUnit
+        SET
+        goodsUnitName=#{goodsUnitName},
+        updDate=#{updDate}
+        where
+        goodsUnitId=#{goodsUnitId}
+    </update>
+
+    <update id="deleteGoodsUnit" parameterType="GoodsUnit">
+        UPDATE goodsUnit
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        goodsUnitId=#{goodsUnitId}
+    </update>
+
+    <insert id="insertGoodsUnit" parameterType="GoodsUnit">
+        insert into
+        goodsUnit(goodsUnitName, outputDelFlg,trkDate, updDate)
+        values(
+        #{goodsUnitName},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertGoodsUnitId" resultType="int">
+        select goodsUnitId from goodsUnit ORDER BY goodsUnitId DESC limit 1
     </select>
 
 </mapper>

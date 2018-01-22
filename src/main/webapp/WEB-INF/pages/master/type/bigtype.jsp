@@ -97,7 +97,7 @@
 		});
 
 
-        //出庫修正
+        //大分類修正
         function updateBigtype(obj) {
             //キーワード
             console.log("Bigtype  Id="+ obj);
@@ -112,7 +112,7 @@
             });
         }
 
-        //出庫削除
+        //大分類削除
         function deleteBigtype(obj) {
             //キーワード
             console.log("Bigtype  Id="+ obj);

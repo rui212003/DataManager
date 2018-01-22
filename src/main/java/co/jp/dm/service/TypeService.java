@@ -85,6 +85,9 @@ public class TypeService {
         return smalltype;
     }
 
+    //***************************************
+    //                 大分類
+    //***************************************
 
     /**大分類を修正する*/
     public Bigtype updateBigtypeData(Bigtype bigtype){
@@ -133,6 +136,115 @@ public class TypeService {
         int tempId=typeMapper.getLastInsertBigTypeId();
         bigtype.setBigtypeId(tempId);
         return bigtype;
+    }
+
+
+    //***************************************
+    //                 中分類
+    //***************************************
+
+    /**中分類を修正する*/
+    public Middletype updateMiddletypeData(Middletype middletype){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        middletype.setUpdDate(sdf1.format(date));
+
+        typeMapper.updateMiddletypeDateByMiddletype(middletype);
+        middletype = typeMapper.findMiddleTypeByMiddletypeId(middletype);
+        return middletype;
+    }
+
+    /**中分類を削除する*/
+    public void deleteMiddletypeData(Middletype middletype){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        middletype.setUpdDate(sdf1.format(date));
+        middletype.setOutputDelFlg("1");
+        typeMapper.deleteMiddleTypeByMiddletype(middletype);
+
+    }
+
+    /**中分類を追加する*/
+    public Middletype addMiddletype(Middletype middletype){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+
+        middletype.setUpdDate(sdf1.format(date));
+        middletype.setTrkDate(sdf1.format(date));
+        middletype.setOutputDelFlg("0");
+        middletype.setMiddletypeName("");
+
+
+        typeMapper.insertMiddleType(middletype);
+        int tempId=typeMapper.getLastInsertMiddleTypeId();
+        middletype.setMiddletypeId(tempId);
+        return middletype;
+    }
+
+
+    //*******************************************
+    //               単位部分
+    //*******************************************
+
+    /**大分類を修正する*/
+    public GoodsUnit updateGoodsUnit(GoodsUnit goodsUnit){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        goodsUnit.setUpdDate(sdf1.format(date));
+
+        typeMapper.updateGoodsUnit(goodsUnit);
+        goodsUnit = typeMapper.findGoodUnitByGoodUnitId(goodsUnit);
+        return goodsUnit;
+    }
+
+    /**大分類を削除する*/
+    public void deleteGoodsUnit(GoodsUnit goodsUnit){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        goodsUnit.setUpdDate(sdf1.format(date));
+        goodsUnit.setOutputDelFlg("1");
+        typeMapper.deleteGoodsUnit(goodsUnit);
+
+    }
+
+    /**大分類を追加する*/
+    public GoodsUnit addGoodsUnit(){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        GoodsUnit goodsUnit=new GoodsUnit();
+        goodsUnit.setUpdDate(sdf1.format(date));
+        goodsUnit.setTrkDate(sdf1.format(date));
+        goodsUnit.setOutputDelFlg("0");
+        goodsUnit.setGoodsUnitName("");
+
+        typeMapper.insertGoodsUnit(goodsUnit);
+        int tempId=typeMapper.getLastInsertGoodsUnitId();
+        goodsUnit.setGoodsUnitId(tempId);
+        return goodsUnit;
     }
 
 }

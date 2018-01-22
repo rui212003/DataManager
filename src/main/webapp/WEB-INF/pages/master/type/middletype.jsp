@@ -61,7 +61,7 @@
 						</div>
 						<div class="tab-content">
 							<div class="col-md-2">
-								<input type="button" class="btn btn-block btn-success" value="新規追加">
+								<input type="button" class="btn btn-block btn-success" onclick="addMiddletype()" value="新規追加">
 							</div>
 						</div>
 						<div class="tab-content">
@@ -70,7 +70,6 @@
 									<thead>
 										<tr>
 											<th>No</th>
-											<th>大分類</th>
 											<th>中分類</th>
 											<th>操作</th>
 										</tr>
@@ -97,6 +96,102 @@
 		$(document).ready(function() {
 
 		});
+
+        //大分類により中分類を取得
+        $("#big_type").change(function () {
+            var bigtypeValue = $("[name=big_type]").val();
+            if (bigtypeValue == "大分類") {
+                bigtypeValue = "";
+            }
+            //設定
+            $("#middle_type").val("");
+            console.log("bittypeValue=" + bigtypeValue);
+            $.post("/DataManager/type/getMiddleTypeByBigType", {"outInput": "3","bigtypeValue": bigtypeValue}, function (data) {
+                if (data == "login") {
+                    logoutFun();
+                }
+                var items = JSON.parse(data);
+                makeMiddleType(items);
+
+            });
+        });
+
+        //中分類リストを取得
+        function makeMiddleType(items) {
+
+            $("#middleTypeData").html("");
+            var htmlContent = "";
+            for (var i = 0; i < items.length; i++) {
+
+                var middletypeName="middletypeName-"+items[i].middletypeId;
+
+                htmlContent =
+                        htmlContent + '' +
+                        '<tr id="' + items[i].middletypeId + '">' +
+                        '<td>' + (i + 1) + '</td>' +
+                        '<td> <input class="tdwidth120" type="text" placeholder="中分類名"  name="'+middletypeName+'"  id="'+middletypeName+'" value="' + items[i].middletypeName + '"/></td>' +
+                        '<td>' +
+                        '<button onclick="updateMiddletype(' + items[i].middletypeId + ')" class="btn btn-primary operation-button-btn">更新</button>&nbsp;&nbsp;&nbsp;'+
+                        '<button onclick="deleteMiddletype(' + items[i].middletypeId + ')" class="btn btn-danger operation-button-btn">削除</button>'
+                '</td>' +
+                '</tr>';
+            }
+            $("#middleTypeData").html(htmlContent);
+        }
+
+
+        //中分類修正
+        function updateMiddletype(obj) {
+            //キーワード
+            var middletypeId=obj;
+            var tmpmiddletypeName=document.getElementById("middletypeName-"+middletypeId).value;
+
+            //大分類を修正
+            $.post("/DataManager/type/updateMiddletypeName", {"middletypeId": middletypeId,"tmpmiddletypeName": tmpmiddletypeName}, function (data) {
+                if (data == "login") {
+                    logoutFun();
+                }
+            });
+        }
+
+        //中分類削除
+        function deleteMiddletype(obj) {
+            //キーワード
+
+            var middletypeId=obj;
+
+            if (!confirm("この行を削除しますか？"))
+
+                return;
+            $.post("/DataManager/type/deleteMiddletypeName", {"middletypeId": middletypeId}, function (data) {
+                if (data == "login") {
+                    logoutFun();
+                }
+                var items = JSON.parse(data);
+                makeMiddleType(items);
+            });
+        }
+
+        //中分類を追加する
+        function addMiddletype() {
+            var bigtypeId = $("[name=big_type]").val();
+            console.log("bigtypeId="+bigtypeId);
+            if ("0"==bigtypeId) {
+                alert("大分類を選択してください");
+            }else{
+                //中分類を追加する
+                $.post("/DataManager/type/addMiddletype", {"bigtypeId": bigtypeId}, function (data) {
+                    if (data == "login") {
+                        logoutFun();
+                    }
+
+                    var items = JSON.parse(data);
+                    makeMiddleType(items);
+                });
+            }
+
+
+        }
 	</script>
 
 </body>

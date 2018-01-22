@@ -102,7 +102,7 @@
             //キーワード
             console.log("goodsUnitId  Id="+ obj);
             var goodsUnitId=obj;
-            var tmpGoodsUnitName=document.getElementById("tempUnitName-"+bigtypeId).value;
+            var tmpGoodsUnitName=document.getElementById("tempUnitName-"+goodsUnitId).value;
 
             //大分類を修正
             $.post("/DataManager/type/updateGoodsUnitName", {"goodsUnitId": goodsUnitId,"tmpGoodsUnitName": tmpGoodsUnitName}, function (data) {
@@ -145,10 +145,10 @@
                         htmlContent + '' +
                         '<tr id="' + items[i].goodsUnitId + '">' +
                         '<td>' + (i + 1) + '</td>' +
-                        '<td> <input class="tdwidth120" type="text" placeholder="大分類名"  name="'+goodsUnitId+'"  id="'+goodsUnitId+'" value="' + items[i].bigtypeName + '"/></td>' +
+                        '<td> <input class="tdwidth120" type="text" placeholder="大分類名"  name="'+goodsUnitId+'"  id="'+goodsUnitId+'" value="' + items[i].goodsUnitName + '"/></td>' +
                         '<td>' +
-                        '<button onclick="updateBigtype(' + items[i].goodsUnitId + ')" class="btn btn-primary operation-button-btn">更新</button>&nbsp;&nbsp;&nbsp;'+
-                        '<button onclick="deleteBigtype(' + items[i].goodsUnitId + ')" class="btn btn-danger operation-button-btn">削除</button>'
+                        '<button onclick="updateGoodsUnit(' + items[i].goodsUnitId + ')" class="btn btn-primary operation-button-btn">更新</button>&nbsp;&nbsp;&nbsp;'+
+                        '<button onclick="deleteGoodsUnit(' + items[i].goodsUnitId + ')" class="btn btn-danger operation-button-btn">削除</button>'
                 '</td>' +
                 '</tr>';
             }

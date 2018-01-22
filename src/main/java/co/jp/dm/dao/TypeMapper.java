@@ -34,18 +34,59 @@ public interface TypeMapper {
     /**小分類　名称を取得*/
     public Smalltype findSmallTypeBySmalltypeId(Smalltype smalltype);
 
+
+    //*******************************************
+    //***************大分類**********************
+    //*******************************************
+
+
     /**大分類　を更新する*/
     public void updateBigtypeDateBybigtype(Bigtype bigtype);
 
     /**大分類　を削除する*/
     public void deleteBigTypeByBigtype(Bigtype bigtype);
 
-
     /**大分類　を追加する*/
     public void insertBigType(Bigtype bigtype);
 
     /**大分類ID　を取得する*/
     public int getLastInsertBigTypeId();
+
+    //*******************************************
+    //***************中分類**********************
+    //*******************************************
+
+
+    /**大分類　を更新する*/
+    public void updateMiddletypeDateByMiddletype(Middletype middletype);
+
+    /**大分類　を削除する*/
+    public void deleteMiddleTypeByMiddletype(Middletype middletype);
+
+    /**大分類　を追加する*/
+    public void insertMiddleType(Middletype middletype);
+
+    /**大分類ID　を取得する*/
+    public int getLastInsertMiddleTypeId();
+
+    //*******************************************
+    //***************　単位 **********************
+    //*******************************************
+
+    /**大分類　名称を取得*/
+    public GoodsUnit findGoodUnitByGoodUnitId(GoodsUnit goodsUnit);
+
+    /**大分類　を更新する*/
+    public void updateGoodsUnit(GoodsUnit goodsUnit);
+
+    /**大分類　を削除する*/
+    public void deleteGoodsUnit(GoodsUnit goodsUnit);
+
+    /**大分類　を追加する*/
+    public void insertGoodsUnit(GoodsUnit goodsUnit);
+
+    /**大分類ID　を取得する*/
+    public int getLastInsertGoodsUnitId();
 
 
 }
