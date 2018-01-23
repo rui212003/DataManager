@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.jp.dm.dao.ClientMapper">
+
+    <select id="findAllClient"  resultType="Client">
+        select * from clientList where outputDelFlg=0
+    </select>
+
+    <select id="findClientByClientId" parameterType="Client" resultType="Client">
+        select * from clientList where  clientId=#{clientId} limit 1
+    </select>
+
+    <update id="updateClient" parameterType="Client">
+        UPDATE clientList
+        SET
+        clientName=#{clientName},
+        clientZip=#{clientZip},
+        clientAddress=#{clientAddress},
+        clientPhone=#{clientPhone},
+        clientBiko=#{clientBiko},
+        updDate=#{updDate}
+        where
+        clientId=#{clientId}
+    </update>
+
+    <update id="deleteClient" parameterType="Client">
+        UPDATE clientList
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        clientId=#{clientId}
+    </update>
+
+    <insert id="insertClient" parameterType="Client">
+        insert into
+        clientList(clientName,clientZip,clientAddress,clientPhone,clientBiko, outputDelFlg,trkDate, updDate)
+        values(
+        #{clientName},
+        #{clientZip},
+        #{clientAddress},
+        #{clientPhone},
+        #{clientBiko},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertClientId" resultType="int">
+        select clientId from clientList ORDER BY clientId DESC limit 1
+    </select>
+
+</mapper>
