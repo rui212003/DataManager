@@ -183,4 +183,50 @@
         select goodsUnitId from goodsUnit ORDER BY goodsUnitId DESC limit 1
     </select>
 
+
+
+
+
+    <select id="findAllWarehouse"  resultType="Warehouse">
+        select * from warehouse where outputDelFlg=0
+    </select>
+
+    <select id="findWarehouseByWarehouseId" parameterType="Warehouse" resultType="Warehouse">
+        select * from warehouse where  warehouseId=#{warehouseId} limit 1
+    </select>
+
+    <update id="updateWarehouse" parameterType="Warehouse">
+        UPDATE warehouse
+        SET
+        warehouseName=#{warehouseName},
+        updDate=#{updDate}
+        where
+        warehouseId=#{warehouseId}
+    </update>
+
+    <update id="deleteWarehouse" parameterType="Warehouse">
+        UPDATE warehouse
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        warehouseId=#{warehouseId}
+    </update>
+
+    <insert id="insertWarehouse" parameterType="Warehouse">
+        insert into
+        warehouse(userGroupName,warehouseName, outputDelFlg,trkDate, updDate)
+        values(
+        #{userGroupName},
+        #{warehouseName},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertWarehouseId" resultType="int">
+        select warehouseId from warehouse ORDER BY warehouseId DESC limit 1
+    </select>
+
 </mapper>

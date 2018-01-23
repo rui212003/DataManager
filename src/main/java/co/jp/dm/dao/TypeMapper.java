@@ -1,10 +1,7 @@
 package co.jp.dm.dao;
 
 
-import co.jp.dm.entity.Bigtype;
-import co.jp.dm.entity.GoodsUnit;
-import co.jp.dm.entity.Middletype;
-import co.jp.dm.entity.Smalltype;
+import co.jp.dm.entity.*;
 
 import java.util.List;
 
@@ -104,6 +101,29 @@ public interface TypeMapper {
 
     /**大分類ID　を取得する*/
     public int getLastInsertGoodsUnitId();
+
+    //*******************************************
+    //***************　倉庫 **********************
+    //*******************************************
+
+    /**倉庫　全部データを取得*/
+    public List<Warehouse> findAllWarehouse();
+
+    /**倉庫　名称を取得*/
+    public Warehouse findWarehouseByWarehouseId(Warehouse warehouse);
+
+    /**倉庫　を更新する*/
+    public void updateWarehouse(Warehouse warehouse);
+
+    /**倉庫　を削除する*/
+    public void deleteWarehouse(Warehouse warehouse);
+
+    /**倉庫　を追加する*/
+    public void insertWarehouse(Warehouse warehouse);
+
+    /**倉庫ID　を取得する*/
+    public int getLastInsertWarehouseId();
+
 
 
 }

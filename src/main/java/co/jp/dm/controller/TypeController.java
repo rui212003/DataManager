@@ -669,4 +669,152 @@ public class TypeController {
 
     }
 
+
+
+
+    //*******************************************
+    //               倉庫部分
+    //*******************************************
+
+    /**
+     * 倉庫ページを遷移する
+     *
+     * @return  String 倉庫を取得
+     *
+     * */
+    @RequestMapping(value="/toWarehousePage", method=RequestMethod.GET , produces = "text/html;charset=UTF-8")
+    public String toWarehousePage(HttpSession session, ModelMap modelMap,HttpServletRequest request) throws IOException {
+        //
+        User user = (User) session.getAttribute("user");
+        if(user == null){
+            return Config.LoginSession;
+        } else {
+
+            //倉庫を取得
+
+            List<Warehouse> warehouseList=typeService.getAllWarehouse();
+            session.setAttribute("masterWarehouseList", warehouseList);
+            modelMap.addAttribute("masterWarehouseList",warehouseList);
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve("","",Config.TWarehouse,session,request);
+
+            return "master/warehouse/warehouse";
+
+        }
+    }
+
+    /**
+     * 倉庫データを更新する
+     * */
+    @RequestMapping(value="/updateWarehouseName",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String updateWarehouseName(@RequestParam("warehouseId")String warehouseId,@RequestParam("tmpWarehouseName")String tmpWarehouseName,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Warehouse warehouse=new Warehouse();
+        warehouse.setWarehouseId(Integer.valueOf(warehouseId));
+        warehouse.setWarehouseName(tmpWarehouseName);
+        warehouse=typeService.updateWarehouseName(warehouse);
+
+        //session更新
+        List<Warehouse> warehouseList=( List<Warehouse>)session.getAttribute("masterWarehouseList");
+        List<Warehouse> warehouseListNew=new ArrayList<Warehouse>();
+        if(warehouseList!=null){
+            for(int nIndex=0;nIndex<warehouseList.size();nIndex++){
+                String temp=warehouseList.get(nIndex).getWarehouseId()+"";
+                if(warehouseId.equals(temp)){
+                    warehouseListNew.add(warehouse);
+                }else{
+                    warehouseListNew.add(warehouseList.get(nIndex));
+                }
+            }
+        }
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TWarehouse,session,request);
+
+        session.setAttribute("masterWarehouseList", warehouseListNew);
+        return "true";
+
+    }
+
+    /**
+     * 倉庫データを削除する
+     * */
+    @RequestMapping(value="/deleteWarehouseName",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String deleteWarehouseName(@RequestParam("warehouseId")String warehouseId,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Warehouse warehouse=new Warehouse();
+        warehouse.setWarehouseId(Integer.valueOf(warehouseId));
+        typeService.deleteWarehouse(warehouse);
+
+        //session更新
+        List<Warehouse> warehouseList=( List<Warehouse>)session.getAttribute("masterWarehouseList");
+        List<Warehouse> warehouseListNew=new ArrayList<Warehouse>();
+        if(warehouseList!=null){
+            for(int nIndex=0;nIndex<warehouseList.size();nIndex++){
+                String temp=warehouseList.get(nIndex).getWarehouseId()+"";
+                if(warehouseId.equals(temp)){
+                    System.out.println("eee");
+                }else{
+                    warehouseListNew.add(warehouseList.get(nIndex));
+                }
+            }
+        }
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TWarehouse,session,request);
+
+        session.setAttribute("masterWarehouseList", warehouseListNew);
+
+        Gson gson=new Gson();
+
+        return gson.toJson(warehouseListNew);
+
+    }
+
+
+    /**
+     * 倉庫データを追加する
+     * */
+    @RequestMapping(value="/addWarehouse",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String addWarehouse(ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Warehouse warehouse=new Warehouse();
+        warehouse=typeService.addWarehouse();
+
+        List<Warehouse> warehouseList=typeService.getAllWarehouse();
+        session.setAttribute("masterWarehouseList", warehouseList);
+        modelMap.addAttribute("masterWarehouseList",warehouseList);
+
+
+        //historyテーブルを更新
+        historyValveService.addHistoryValve("","",Config.TWarehouse,session,request);
+
+        Gson gson=new Gson();
+
+        return gson.toJson(warehouseList);
+
+    }
+
 }

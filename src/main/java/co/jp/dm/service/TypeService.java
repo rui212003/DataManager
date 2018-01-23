@@ -2,10 +2,7 @@ package co.jp.dm.service;
 
 import co.jp.dm.dao.HistoryValveMapper;
 import co.jp.dm.dao.TypeMapper;
-import co.jp.dm.entity.Bigtype;
-import co.jp.dm.entity.GoodsUnit;
-import co.jp.dm.entity.Middletype;
-import co.jp.dm.entity.Smalltype;
+import co.jp.dm.entity.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -301,4 +298,64 @@ public class TypeService {
         return goodsUnit;
     }
 
+
+    //*******************************************
+    //              倉庫部分
+    //*******************************************
+
+    /**倉庫マスターを抽出する*/
+    public List<Warehouse> getAllWarehouse(){
+        List<Warehouse> warehouseList = typeMapper.findAllWarehouse();
+        return warehouseList;
+    }
+
+    /**倉庫を修正する*/
+    public Warehouse updateWarehouseName(Warehouse warehouse){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        warehouse.setUpdDate(sdf1.format(date));
+
+        typeMapper.updateWarehouse(warehouse);
+        warehouse = typeMapper.findWarehouseByWarehouseId(warehouse);
+        return warehouse;
+    }
+
+    /**倉庫を削除する*/
+    public void deleteWarehouse(Warehouse warehouse){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        warehouse.setUpdDate(sdf1.format(date));
+        warehouse.setOutputDelFlg("1");
+        typeMapper.deleteWarehouse(warehouse);
+
+    }
+
+    /**倉庫を追加する*/
+    public Warehouse addWarehouse(){
+
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        Warehouse warehouse=new Warehouse();
+        warehouse.setUpdDate(sdf1.format(date));
+        warehouse.setTrkDate(sdf1.format(date));
+        warehouse.setOutputDelFlg("0");
+        warehouse.setWarehouseName("");
+        warehouse.setUserGroupName("");
+
+        typeMapper.insertWarehouse(warehouse);
+        int tempId=typeMapper.getLastInsertWarehouseId();
+        warehouse.setWarehouseId(tempId);
+        return warehouse;
+    }
 }
