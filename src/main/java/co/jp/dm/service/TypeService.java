@@ -309,6 +309,16 @@ public class TypeService {
         return warehouseList;
     }
 
+    /**倉庫IDによりデータを抽出する*/
+    public Warehouse getWarehouseByWarehouseId(int warehouseId){
+        Warehouse warehouse = new Warehouse();
+        warehouse.setWarehouseId(warehouseId);
+        warehouse.setOutputDelFlg("0");
+
+        warehouse=typeMapper.findWarehouseByWarehouseId(warehouse);
+        return warehouse;
+    }
+
     /**倉庫を修正する*/
     public Warehouse updateWarehouseName(Warehouse warehouse){
 

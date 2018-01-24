@@ -38,7 +38,7 @@
 							<li><a href="/DataManager/output/toAddPage">出庫追加</a></li>
 						</ul></li>
 					<!-- 在庫 -->
-					<li><a href="#">在庫管理</a></li>
+					<li><a href="/DataManager/stock/toStockPage/">在庫管理</a></li>
 					<!-- マスタ -->
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							Master<span class="caret"></span>

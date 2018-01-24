@@ -29,6 +29,7 @@ public class Config {
     public static final String TInsert = "新規追加";
     public static final String TEdit = "更新";
     public static final String TDelete = "削除";
+    public static final String TMaster = "master取得";
 
     public static final String TLogin="ログイン";
     public static final String TLogout="ログアウト";

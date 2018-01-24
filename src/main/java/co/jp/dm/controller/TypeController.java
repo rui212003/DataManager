@@ -109,9 +109,14 @@ public class TypeController {
             session.setAttribute("masterMiddletypeList", middletypeList);
 
             return gson.toJson(middletypeList);
-        }else{
+        }else if("5".equals(outInput)){
             //マスタ　商品リストページ場合
             session.setAttribute("masterGoodsListMiddletypeList", middletypeList);
+
+            return gson.toJson(middletypeList);
+        }else{
+            //マスタ　商品リストページ場合
+            session.setAttribute("stockListMiddletypeList", middletypeList);
 
             return gson.toJson(middletypeList);
         }
@@ -154,9 +159,14 @@ public class TypeController {
             session.setAttribute("masterSmalltypeList", smalltypeList);
 
             return gson.toJson(smalltypeList);
-        }else{
+        }else if("4".equals(outInput)){
             //マスタ　商品リストページ場合
             session.setAttribute("masterGoodsListSmalltypeList", smalltypeList);
+
+            return gson.toJson(smalltypeList);
+        }else{
+            //マスタ　在庫ページ場合
+            session.setAttribute("stockSmalltypeList", smalltypeList);
 
             return gson.toJson(smalltypeList);
         }

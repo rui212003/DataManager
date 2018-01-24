@@ -192,7 +192,7 @@
     </select>
 
     <select id="findWarehouseByWarehouseId" parameterType="Warehouse" resultType="Warehouse">
-        select * from warehouse where  warehouseId=#{warehouseId} limit 1
+        select * from warehouse where  warehouseId=#{warehouseId} and outputDelFlg=#{outputDelFlg} limit 1
     </select>
 
     <update id="updateWarehouse" parameterType="Warehouse">
