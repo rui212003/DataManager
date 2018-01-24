@@ -12,4 +12,52 @@
         select * from goodsList where outputDelFlg=#{outputDelFlg} and goodsBarcode=#{goodsBarcode} limit 1
     </select>
 
+    <select id="findAllGoodsListByType" parameterType="GoodsList"  resultType="GoodsList">
+        select * from goodsList where outputDelFlg=#{outputDelFlg} and goodsBigtypeId=#{goodsBigtypeId} and goodsMiddletypeId=#{goodsMiddletypeId} and goodsSmalltypeId=#{goodsSmalltypeId}
+    </select>
+
+    <update id="updateGoodsList" parameterType="GoodsList">
+        UPDATE goodsList
+        SET
+        goodsListName=#{goodsListName},
+        goodsBarcode=#{goodsBarcode},
+        goodsPriceJP=#{goodsPriceJP},
+        goodsPriceCH=#{goodsPriceCH},
+        goodsUnitName=#{goodsUnitName},
+        updDate=#{updDate}
+        where
+        goodsListId=#{goodsListId}
+    </update>
+
+    <update id="deleteGoodsList" parameterType="GoodsList">
+        UPDATE goodsList
+        SET
+        outputDelFlg=#{outputDelFlg},
+        updDate=#{updDate}
+        where
+        goodsListId=#{goodsListId}
+    </update>
+
+    <insert id="insertGoodsList" parameterType="GoodsList">
+        insert into
+        goodsList(goodsBigtypeId,goodsMiddletypeId,goodsSmalltypeId,goodsListName,goodsBarcode, goodsPriceJP,goodsPriceCH,goodsUnitName,outputDelFlg,trkDate, updDate)
+        values(
+        #{goodsBigtypeId},
+        #{goodsMiddletypeId},
+        #{goodsSmalltypeId},
+        #{goodsListName},
+        #{goodsBarcode},
+        #{goodsPriceJP},
+        #{goodsPriceCH},
+        #{goodsUnitName},
+        #{outputDelFlg},
+        #{trkDate},
+        #{updDate}
+        )
+    </insert>
+
+    <select id="getLastInsertGoodsListId" resultType="int">
+        select goodsListId from goodsList ORDER BY goodsListId DESC limit 1
+    </select>
+
 </mapper>

@@ -44,7 +44,7 @@
 							Master<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">商品名称</a></li>
+							<li><a href="/DataManager/type/goodsList/toTypePage/">商品名称</a></li>
 							<li><a href="/DataManager/type/big/toTypePage/">商品分類</a></li>
 							<li><a href="/DataManager/client/toClientPage/">顧客</a></li>
 							<li><a href="/DataManager/type/toWarehousePage/">倉庫一覧</a></li>

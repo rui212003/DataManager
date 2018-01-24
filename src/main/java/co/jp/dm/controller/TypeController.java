@@ -58,8 +58,10 @@ public class TypeController {
                 return "master/type/bigtype";
             }else if("middle".equals(typeNum)){
                 return "master/type/middletype";
-            }else{
+            }else if("small".equals(typeNum)){
                 return "master/type/smalltype";
+            }else{
+                return "master/type/goodsList";
             }
 
         }
@@ -102,9 +104,14 @@ public class TypeController {
             session.setAttribute("masterMiddletypeList", middletypeList);
 
             return gson.toJson(middletypeList);
+        }else if("4".equals(outInput)){
+            //マスタ　中分類ページ場合
+            session.setAttribute("masterMiddletypeList", middletypeList);
+
+            return gson.toJson(middletypeList);
         }else{
-            //マスタ　小分類ページ場合
-            session.setAttribute("masterSmalltypeList", middletypeList);
+            //マスタ　商品リストページ場合
+            session.setAttribute("masterGoodsListMiddletypeList", middletypeList);
 
             return gson.toJson(middletypeList);
         }
@@ -142,9 +149,14 @@ public class TypeController {
             session.setAttribute("outputsmalltypeList", smalltypeList);
 
             return gson.toJson(smalltypeList);
-        }else{
+        }else if("3".equals(outInput)){
             //マスタ　小分類ページ場合
             session.setAttribute("masterSmalltypeList", smalltypeList);
+
+            return gson.toJson(smalltypeList);
+        }else{
+            //マスタ　商品リストページ場合
+            session.setAttribute("masterGoodsListSmalltypeList", smalltypeList);
 
             return gson.toJson(smalltypeList);
         }
