@@ -97,6 +97,7 @@
                                 <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>倉庫</th>
                                     <th>商品名</th>
                                     <th>バーコード</th>
                                     <th>数量</th>
@@ -112,6 +113,7 @@
                                 <c:forEach items="${inputLists}" var="inputList" varStatus="status">
                                     <tr id="${inputList.inputListId}">
                                         <td><c:out value="${status.count}"/></td>
+                                        <td>${inputList.warehouseId}</td>
                                         <td>${inputList.goodsList.goodsListName}</td>
                                         <td>${inputList.goodsList.goodsBarcode}</td>
                                         <td><input  name="inputNum-${inputList.inputListId}" id="inputNum-${inputList.inputListId}" class="tdwidth50" type="number" placeholder="数量" value="${inputList.inputNum}"/></td>
@@ -279,6 +281,7 @@
                     htmlContent + '' +
                     '<tr id="' + items[i].inputListId + '">' +
                     '<td>' + (i + 1) + '</td>' +
+                    '<td>' + items[i].warehouseId + '</td>' +
                     '<td>' + items[i].goodsList.goodsListName + '</td>' +
                     '<td>' + items[i].goodsList.goodsBarcode + '</td>' +
                     '<td> <input class="tdwidth50" type="number" placeholder="数量"  name="'+inputNumId+'"  id="'+inputNumId+'" value="' + items[i].inputNum + '"/></td>' +

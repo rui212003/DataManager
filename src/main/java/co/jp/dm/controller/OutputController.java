@@ -243,7 +243,7 @@ public class OutputController {
         }
 
         //追加用
-        List<OutputList> outputListNew=new ArrayList<OutputList>();
+        List<OutputList> outputListNew=new ArrayList<OutputList>(); //入庫
 
         String tempTrackNum="";
 
@@ -292,6 +292,13 @@ public class OutputController {
                             //削除フラグを0に設定する
                             outputListTemp.setOutputDelFlg("0");
                             //倉庫を設定する
+                            if(outputtemp[3]==""){
+                                //デフォルトで一番の倉庫にする
+                                outputListTemp.setWarehouseId(1);
+                            }else{
+                                outputListTemp.setWarehouseId(Integer.valueOf(outputtemp[3]));
+                            }
+
 
                             //append Date
                             Date date = new Date();
@@ -310,6 +317,7 @@ public class OutputController {
 
         //DBに保存する
 
+        //入庫データを保存する
         outputListNew=outputService.insertOutputDataByLists(outputListNew);
 
 

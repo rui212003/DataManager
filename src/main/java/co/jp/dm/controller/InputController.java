@@ -265,7 +265,15 @@ public class InputController {
                             inputListTemp.setInputNum(1);
                             //削除フラグを0に設定する
                             inputListTemp.setInputDelFlg("0");
+
                             //倉庫を設定する
+                            if(inputtemp[3]==""){
+                                //デフォルトで一番の倉庫にする
+                                inputListTemp.setWarehouseId(1);
+                            }else{
+                                inputListTemp.setWarehouseId(Integer.valueOf(inputtemp[3]));
+                            }
+
 
                             //append Date
                             Date date = new Date();

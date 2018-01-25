@@ -80,10 +80,10 @@
                                 <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>倉庫</th>
                                     <th>商品名</th>
                                     <th>バーコード</th>
                                     <th>数量</th>
-                                    <th>倉庫</th>
                                     <th>単位</th>
                                     <%--<th>操作</th>--%>
                                 </tr>
