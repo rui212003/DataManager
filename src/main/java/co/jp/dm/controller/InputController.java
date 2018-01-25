@@ -1,11 +1,9 @@
 package co.jp.dm.controller;
 
 import co.jp.dm.entity.*;
-import co.jp.dm.service.GoodsListService;
-import co.jp.dm.service.HistoryValveService;
-import co.jp.dm.service.InputService;
-import co.jp.dm.service.TypeService;
+import co.jp.dm.service.*;
 import com.google.gson.Gson;
+import com.sun.corba.se.spi.orbutil.fsm.Input;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,6 +36,9 @@ public class InputController {
 
     @Autowired
     TypeService typeService;
+
+    @Autowired
+    StockListService stockListService;
 
     @Autowired
     HistoryValveService historyValveService;
@@ -110,12 +111,27 @@ public class InputController {
             return Config.LoginSession;
         }
 
+        //現在在庫数量を更新する
+        InputList inputListOld=new InputList();
+        inputListOld.setInputListId(Integer.valueOf(inputDataId));
+        inputListOld=inputService.getInputListById(inputListOld);
+
+
+         //入荷データを更新する
         InputList inputList=new InputList();
         inputList.setInputListId(Integer.valueOf(inputDataId));
         inputList.setInputNum(Integer.valueOf(tmpInputNum));
         inputList.setInputDiscount(Double.valueOf(tmpInputDiscount));
         inputList.setInputDate(tmpInputDate);
         inputList=inputService.updateInputdata(inputList);
+
+        //在庫数量を更新する
+        Integer numStock=Integer.valueOf(tmpInputNum)-inputListOld.getInputNum();
+        StockList stockListTemp=new StockList();
+        stockListTemp.setGoodsListId(inputList.getGoodsListId());
+        stockListTemp.setStockputNum(numStock);
+        stockListTemp.setStockWarehouseId(inputList.getWarehouseId());
+        stockListService.updateStockNumOneByOne(stockListTemp);
 
         //session更新
         List<InputList> inputLists=( List<InputList>)session.getAttribute("inputLists");
@@ -151,9 +167,23 @@ public class InputController {
             return Config.LoginSession;
         }
 
+        //現在在庫数量を更新する
+        InputList inputListOld=new InputList();
+        inputListOld.setInputListId(Integer.valueOf(inputDataId));
+        inputListOld=inputService.getInputListById(inputListOld);
+
+
         InputList inputList=new InputList();
         inputList.setInputListId(Integer.valueOf(inputDataId));
         inputService.deteleInputdata(inputList);
+
+        //在庫数量を更新する
+        Integer numStock=0-inputListOld.getInputNum();
+        StockList stockListTemp=new StockList();
+        stockListTemp.setGoodsListId(inputListOld.getGoodsListId());
+        stockListTemp.setStockputNum(numStock);
+        stockListTemp.setStockWarehouseId(inputListOld.getWarehouseId());
+        stockListService.updateStockNumOneByOne(stockListTemp);
 
         //session更新
         List<InputList> inputLists=( List<InputList>)session.getAttribute("inputLists");
@@ -218,6 +248,7 @@ public class InputController {
 
         //追加用
         List<InputList> inputListNew=new ArrayList<InputList>();
+        List<StockList> stockListsNew=new ArrayList<StockList>();
 
         String tempTrackNum="";
 
@@ -227,7 +258,7 @@ public class InputController {
             if(vids.length>0){
                 for(int i = 0;i<vids.length;i++){
                     String[] inputtemp =vids[i].split("\\t");
-                    if(inputtemp.length==3){
+                    if(inputtemp.length==4){
 
                         if("NW7".equals(inputtemp[2])){
                         //追跡番号の場合
@@ -283,6 +314,23 @@ public class InputController {
                             inputListTemp.setUpdDate(sdf1.format(date));
 
                             inputListNew.add(inputListTemp);
+
+                            //在庫更新
+
+                            //現在在庫数量を更新する
+                            StockList stockListOldTemp=new StockList();
+                            stockListOldTemp.setGoodsListId(goodsList.getGoodsListId());
+                            stockListOldTemp.setStockWarehouseId(inputListTemp.getWarehouseId());
+                            stockListOldTemp=stockListService.getStockListByGoodsIdAndWarehouseId(stockListOldTemp);
+
+                            //在庫数
+//                            Integer tempStock=stockListOldTemp.getStockputNum()+1;
+                            StockList stockListTemp=new StockList();
+                            stockListTemp.setGoodsListId(goodsList.getGoodsListId());
+                            stockListTemp.setStockputNum(1);
+                            stockListTemp.setStockWarehouseId(inputListTemp.getWarehouseId());
+
+                            stockListsNew.add(stockListTemp);
                         }
 
                     }
@@ -293,6 +341,12 @@ public class InputController {
         //DBに保存する
 
         inputListNew=inputService.insertInputDataByLists(inputListNew);
+//        stockListService.updateStockNum(stockListsNew);
+        if(stockListsNew!=null){
+            for(int nIndex=0;nIndex<stockListsNew.size();nIndex++){
+                stockListService.updateStockNumOneByOne(stockListsNew.get(nIndex));
+            }
+        }
 
 
 

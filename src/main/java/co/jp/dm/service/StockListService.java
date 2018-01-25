@@ -29,6 +29,33 @@ public class StockListService {
         return stockLists;
     }
 
+    /**在庫データを抽出する*/
+    public StockList getStockListByGoodsIdAndWarehouseId(StockList stockList){
 
+        stockList=stockListMapper.findStockListByGoodsIdAndWarehouseId(stockList);
+
+        return stockList;
+    }
+
+
+    /**在庫データを更新する 複数*/
+    public void updateStockNum(List<StockList> stockLists){
+
+        stockListMapper.updateStockNum(stockLists);
+
+    }
+
+    /**在庫データを更新する */
+    public void updateStockNumOneByOne(StockList stockLists){
+        //append Date
+        Date date = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+        stockLists.setUpdDate(sdf1.format(date));
+
+        stockListMapper.updateStockNumOneByOne(stockLists);
+
+    }
 
 }

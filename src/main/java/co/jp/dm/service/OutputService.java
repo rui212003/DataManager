@@ -25,6 +25,13 @@ public class OutputService {
         return outputLists;
     }
 
+    /**出庫データを抽出する*/
+    public OutputList getOutputListById(OutputList outputList){
+        outputList.setOutputDelFlg("0");
+        OutputList outputLists = outputMapper.findOutputListById(outputList);
+        return outputLists;
+    }
+
     /**出庫データを修正する*/
     public OutputList updateOutputdata(OutputList outputList){
 
@@ -34,6 +41,7 @@ public class OutputService {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 
         outputList.setUpdDate(sdf1.format(date));
+        outputList.setOutputDelFlg("0");
         outputMapper.updateOutputData(outputList);
 
         outputList=outputMapper.findOutputListById(outputList);

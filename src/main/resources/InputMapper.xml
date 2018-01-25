@@ -7,7 +7,7 @@
     </select>
 
     <select id="findInputListById" parameterType="InputList" resultType="InputList">
-        select * from inputList where inputDelFlg=#{inputDelFlg} and inputListId=#{inputListId}
+        select * from inputList where inputDelFlg=#{inputDelFlg} and inputListId=#{inputListId} limit 1
     </select>
 
     <update id="updateInputData" parameterType="InputList">

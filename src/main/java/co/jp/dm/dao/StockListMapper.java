@@ -18,4 +18,13 @@ public interface StockListMapper {
     /**在庫　全部データを取得*/
     public List<StockList> findAllStockListBykeyword(StockList stockList);
 
+    /**在庫　全部データを取得*/
+    public StockList findStockListByGoodsIdAndWarehouseId(StockList stockList);
+
+    /**在庫　全部データを更新　複数*/
+    public void updateStockNum(List<StockList> stockLists);
+
+    /**在庫　全部データを更新*/
+    public void updateStockNumOneByOne(StockList stockLists);
+
 }

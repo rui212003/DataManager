@@ -30,6 +30,13 @@ public class InputService {
         return inputLists;
     }
 
+    /**入庫データIDを抽出する*/
+    public InputList getInputListById(InputList inputList){
+        inputList.setInputDelFlg("0");
+        inputList = inputMapper.findInputListById(inputList);
+        return inputList;
+    }
+
     /**入庫データを修正する*/
     public InputList updateInputdata(InputList inputList){
 
@@ -39,6 +46,8 @@ public class InputService {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 
         inputList.setUpdDate(sdf1.format(date));
+        inputList.setInputDelFlg("0");
+
         inputMapper.updateInputData(inputList);
 
         inputList=inputMapper.findInputListById(inputList);

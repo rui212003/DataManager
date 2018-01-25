@@ -10,4 +10,32 @@
 
     </select>
 
+    <select id="findStockListByGoodsIdAndWarehouseId" parameterType="StockList" resultType="StockList">
+        select * from stockList where goodsListId=#{goodsListId} and stockWarehouseId=#{stockWarehouseId}
+    </select>
+
+
+    <update id="updateStockNum" parameterType="java.util.List" useGeneratedKeys="true">
+
+        <foreach collection="list" item="item" index="index" separator= ";" >
+            UPDATE stockList
+            set
+            stockputNum=#{item.stockputNum},
+            updDate=#{item.updDate}
+            where
+            goodsListId=#{item.goodsListId} and stockWarehouseId=#{item.stockWarehouseId}
+        </foreach>
+
+    </update>
+
+
+    <update id="updateStockNumOneByOne" parameterType="StockList">
+        UPDATE stockList
+        SET
+        stockputNum=stockputNum+#{stockputNum},
+        updDate=#{updDate}
+        where
+        goodsListId=#{goodsListId} and  stockWarehouseId=#{stockWarehouseId}
+    </update>
+
 </mapper>

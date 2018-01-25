@@ -50,6 +50,7 @@
 									<thead>
 										<tr>
 											<th>No</th>
+                                            <th>倉庫</th>
 											<th>大分類</th>
 											<th>中分類</th>
 											<th>小分類</th>
@@ -147,6 +148,7 @@
                         htmlContent + '' +
                         '<tr id="' + items[i].outputListId + '">' +
                         '<td>' + (i + 1) + '</td>' +
+                        '<td>' + items[i].warehouseId + '</td>' +
                         '<td>' + items[i].outputBigtypeName + '</td>' +
                         '<td>' + items[i].outputMiddletypeName + '</td>' +
                         '<td>' + items[i].outputSmalltypeName + '</td>' +

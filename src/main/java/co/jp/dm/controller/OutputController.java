@@ -38,6 +38,9 @@ public class OutputController {
     TypeService typeService;
 
     @Autowired
+    StockListService stockListService;
+
+    @Autowired
     HistoryValveService historyValveService;
 
 
@@ -136,12 +139,26 @@ public class OutputController {
             return Config.LoginSession;
         }
 
+        //現在在庫数量を更新する
+        OutputList outputListOld=new OutputList();
+        outputListOld.setOutputListId(Integer.valueOf(outputDataId));
+        outputListOld=outputService.getOutputListById(outputListOld);
+
+
         OutputList outputList=new OutputList();
         outputList.setOutputListId(Integer.valueOf(outputDataId));
         outputList.setOutputNum(Integer.valueOf(tmpOutputNum));
         outputList.setOutputDiscount(Double.valueOf(tmpOutputDiscount));
         outputList.setOutputDate(tmpOutputDate);
         outputList=outputService.updateOutputdata(outputList);
+
+        //在庫数量を更新する
+        Integer numStock=outputListOld.getOutputNum()-Integer.valueOf(tmpOutputNum);
+        StockList stockListTemp=new StockList();
+        stockListTemp.setGoodsListId(outputList.getGoodsListId());
+        stockListTemp.setStockputNum(numStock);
+        stockListTemp.setStockWarehouseId(outputList.getWarehouseId());
+        stockListService.updateStockNumOneByOne(stockListTemp);
 
         //session更新
         List<OutputList> outputLists=( List<OutputList>)session.getAttribute("outputLists");
@@ -177,9 +194,23 @@ public class OutputController {
             return Config.LoginSession;
         }
 
+        //現在在庫数量を更新する
+        OutputList outputListOld=new OutputList();
+        outputListOld.setOutputListId(Integer.valueOf(outputDataId));
+        outputListOld=outputService.getOutputListById(outputListOld);
+
+
         OutputList outputList=new OutputList();
         outputList.setOutputListId(Integer.valueOf(outputDataId));
         outputService.deteleOutputdata(outputList);
+
+        //在庫数量を更新する
+        Integer numStock=outputListOld.getOutputNum();
+        StockList stockListTemp=new StockList();
+        stockListTemp.setGoodsListId(outputListOld.getGoodsListId());
+        stockListTemp.setStockputNum(numStock);
+        stockListTemp.setStockWarehouseId(outputListOld.getWarehouseId());
+        stockListService.updateStockNumOneByOne(stockListTemp);
 
         //session更新
         List<OutputList> outputLists=( List<OutputList>)session.getAttribute("outputLists");
@@ -244,6 +275,7 @@ public class OutputController {
 
         //追加用
         List<OutputList> outputListNew=new ArrayList<OutputList>(); //入庫
+        List<StockList> stockListsNew=new ArrayList<StockList>();//在庫
 
         String tempTrackNum="";
 
@@ -253,7 +285,7 @@ public class OutputController {
             if(vids.length>0){
                 for(int i = 0;i<vids.length;i++){
                     String[] outputtemp =vids[i].split("\\t");
-                    if(outputtemp.length==3){
+                    if(outputtemp.length==4){
 
                         if("NW7".equals(outputtemp[2])){
                         //追跡番号の場合
@@ -308,6 +340,23 @@ public class OutputController {
                             outputListTemp.setUpdDate(sdf1.format(date));
 
                             outputListNew.add(outputListTemp);
+
+                            //在庫更新
+
+                            //現在在庫数量を更新する
+                            StockList stockListOldTemp=new StockList();
+                            stockListOldTemp.setGoodsListId(goodsList.getGoodsListId());
+                            stockListOldTemp.setStockWarehouseId(outputListTemp.getWarehouseId());
+                            stockListOldTemp=stockListService.getStockListByGoodsIdAndWarehouseId(stockListOldTemp);
+
+                            //在庫数
+                            Integer tempStock=stockListOldTemp.getStockputNum()-1;
+                            StockList stockListTemp=new StockList();
+                            stockListTemp.setGoodsListId(goodsList.getGoodsListId());
+                            stockListTemp.setStockputNum(-1);
+                            stockListTemp.setStockWarehouseId(outputListTemp.getWarehouseId());
+
+                            stockListsNew.add(stockListTemp);
                         }
 
                     }
@@ -319,7 +368,11 @@ public class OutputController {
 
         //入庫データを保存する
         outputListNew=outputService.insertOutputDataByLists(outputListNew);
-
+        if(stockListsNew!=null){
+            for(int nIndex=0;nIndex<stockListsNew.size();nIndex++){
+                stockListService.updateStockNumOneByOne(stockListsNew.get(nIndex));
+            }
+        }
 
 
         int outputListNew_num=0;

@@ -365,6 +365,7 @@
                 if (data == "login") {
                     logoutFun();
                 }
+
             });
         }
     }
