@@ -14,6 +14,8 @@ public class InputList implements Serializable {
     public  int  inputMiddletypeId;    //商品中分類
     public  int  inputSmalltypeId;    //商品小分類
 
+    public  String  goodsBarcode;    //商品バーコード
+
     public  String  inputBigtypeName;    //商品大分類
     public  String  inputMiddletypeName;    //商品中分類
     public  String  inputSmalltypeName;    //商品小分類
@@ -72,6 +74,14 @@ public class InputList implements Serializable {
 
     public void setGoodsListId(int goodsListId) {
         this.goodsListId = goodsListId;
+    }
+
+    public String getGoodsBarcode() {
+        return goodsBarcode;
+    }
+
+    public void setGoodsBarcode(String goodsBarcode) {
+        this.goodsBarcode = goodsBarcode;
     }
 
     public String getInputBigtypeName() {

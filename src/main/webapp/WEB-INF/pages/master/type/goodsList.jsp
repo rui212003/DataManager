@@ -117,7 +117,7 @@
 		$(document).ready(function() {
 			//The Calender
 			$('#sandbox-container .input-daterange').datepicker({
-				format : 'yyyy/mm/dd',
+				format : 'yyyy-mm-dd',
 				language : 'ja',
 				autoclose : true,
 				todayHighlight : true

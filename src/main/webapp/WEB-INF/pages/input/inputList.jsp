@@ -93,7 +93,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <table class="tablesorter table table-hover valve-table" id="inputDataList">
+                            <table class="tablesorter table table-hover valve-table" id="inputDataList" style="font-size: 15px;">
                                 <thead>
                                 <tr>
                                     <th>No</th>
@@ -166,7 +166,7 @@
     $(document).ready(function () {
         //The Calender
         $('#sandbox-container .input-daterange').datepicker({
-            format: 'yyyy/mm/dd',
+            format: 'yyyy-mm-dd',
             language: 'ja',
             autoclose: true,
             todayHighlight: true

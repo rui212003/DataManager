@@ -27,7 +27,8 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="/DataManager/">入庫一覧</a></li>
-							<li><a href="/DataManager/input/toAddPage">入庫追加</a></li>
+							<li><a href="/DataManager/input/toAddPage">入庫追加(一括)</a></li>
+                            <li><a href="/DataManager/input/toAddPageOne">入庫追加(単体手動)</a></li>
 						</ul></li>
 					<!-- 出庫 -->
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -36,6 +37,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="/DataManager/output/toOutputList">出庫一覧</a></li>
 							<li><a href="/DataManager/output/toAddPage">出庫追加</a></li>
+                            <li><a href="/DataManager/output/toAddPageOne">出庫追加(単体手動)</a></li>
 						</ul></li>
 					<!-- 在庫 -->
 					<li><a href="/DataManager/stock/toStockPage/">在庫管理</a></li>

@@ -4,6 +4,7 @@ import co.jp.dm.entity.*;
 import co.jp.dm.service.GoodsListService;
 import co.jp.dm.service.HistoryValveService;
 import co.jp.dm.service.InputService;
+import co.jp.dm.service.TypeService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,9 @@ public class GoodsListController {
 
     @Autowired
     GoodsListService goodsListService;
+
+    @Autowired
+    TypeService typeService;
 
     @Autowired
     HistoryValveService historyValveService;
@@ -193,5 +197,68 @@ public class GoodsListController {
         return gson.toJson(goodsLists);
 
     }
+
+    /**
+     * バーコードから商品情報を取得
+     * */
+    @RequestMapping(value="/getGoodListByBarcode",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getGoodListByBarcode(@RequestParam("inputBarcode")String inputBarcode,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
+
+        Gson gson=new Gson();
+
+        InputList inputListTemp=new InputList();
+
+        //バーコード番号から商品情報を取得
+        GoodsList goodsList=goodsListService.getGoodsLisByBarcode(inputBarcode);
+
+        if(goodsList!=null){
+            inputListTemp.setGoodsList(goodsList);
+            inputListTemp.setGoodsListId(goodsList.getGoodsListId());
+
+
+            //大分類の文字を取得
+            Bigtype bittypetemp=typeService.getBigTypeByBigtypeId(goodsList.getGoodsBigtypeId());
+            inputListTemp.setInputBigtypeName(bittypetemp.getBigtypeName());
+            inputListTemp.setInputBigtypeId(bittypetemp.getBigtypeId());
+
+            //中分類の文字を取得
+            Middletype middletype=typeService.getMiddleTypeBytypeId(goodsList.getGoodsMiddletypeId());
+            inputListTemp.setInputMiddletypeName(middletype.getMiddletypeName());
+            inputListTemp.setInputMiddletypeId(middletype.getMiddletypeId());
+
+            //小分類の文字を取得
+            Smalltype smalltype=typeService.getSmallTypeBytypeId(goodsList.getGoodsSmalltypeId());
+            inputListTemp.setInputSmalltypeName(smalltype.getSmalltypeName());
+            inputListTemp.setInputSmalltypeId(smalltype.getSmalltypeId());
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve(Config.TInputList,"バーコードから商品取得","",session,request);
+
+            return gson.toJson(inputListTemp);
+        }else{
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve(Config.TInputList,"バーコードから商品取得できない","",session,request);
+            return gson.toJson("login");
+        }
+
+
+
+
+
+
+
+
+
+
+    }
+
 
 }
