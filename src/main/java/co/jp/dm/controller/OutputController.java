@@ -1,15 +1,14 @@
 package co.jp.dm.controller;
 
+import co.jp.dm.dto.InputListForm;
+import co.jp.dm.dto.OutputListForm;
 import co.jp.dm.entity.*;
 import co.jp.dm.service.*;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -395,5 +394,133 @@ public class OutputController {
 
     }
 
+
+    /**
+     * 入庫追加ページ(単体)へ遷移しますを追加する
+     * */
+    @RequestMapping(value="/AddOutputOne", method=RequestMethod.POST , produces = "text/html;charset=UTF-8")
+    public String AddOutputOne(@ModelAttribute("outputListForm")OutputListForm outputListForm,HttpSession session,HttpServletRequest request){
+
+        //
+        User user = (User) session.getAttribute("user");
+        if(user == null){
+            return Config.LoginSession;
+        } else {
+
+            //追加用
+            List<OutputList> outputListNew=new ArrayList<OutputList>(); //入庫
+            List<StockList> stockListsNew=new ArrayList<StockList>();//在庫
+
+            //商品の場合
+            OutputList outputListTemp=new OutputList();
+            outputListTemp.setOutputTrackNum(outputListForm.getOutputTrackNum());
+
+            //バーコード番号から商品情報を取得
+            GoodsList goodsList=goodsListService.getGoodsLisByBarcode(outputListForm.getGoodsBarcode());
+            outputListTemp.setGoodsList(goodsList);
+            outputListTemp.setGoodsListId(goodsList.getGoodsListId());
+
+            //大分類の文字を取得
+            Bigtype bittypetemp=typeService.getBigTypeByBigtypeId(goodsList.getGoodsBigtypeId());
+            outputListTemp.setOutputBigtypeName(bittypetemp.getBigtypeName());
+            outputListTemp.setOutputBigtypeId(bittypetemp.getBigtypeId());
+
+            //中分類の文字を取得
+            Middletype middletype=typeService.getMiddleTypeBytypeId(goodsList.getGoodsMiddletypeId());
+            outputListTemp.setOutputMiddletypeName(middletype.getMiddletypeName());
+            outputListTemp.setOutputMiddletypeId(middletype.getMiddletypeId());
+
+            //小分類の文字を取得
+            Smalltype smalltype=typeService.getSmallTypeBytypeId(goodsList.getGoodsSmalltypeId());
+            outputListTemp.setOutputSmalltypeName(smalltype.getSmalltypeName());
+            outputListTemp.setOutputSmalltypeId(smalltype.getSmalltypeId());
+
+            //割引を１に設定する
+            outputListTemp.setOutputDiscount(outputListForm.getOutputDiscount());
+
+            //数量を1に設定する
+            outputListTemp.setOutputNum(outputListForm.getOutputNum());
+            //削除フラグを0に設定する
+            outputListTemp.setOutputDelFlg("0");
+            //倉庫を設定する
+            outputListTemp.setWarehouseId(outputListForm.getWarehouseId());
+
+
+
+            //append Date
+            Date date = new Date();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            outputListTemp.setTrkDate(sdf1.format(date));
+            outputListTemp.setUpdDate(sdf1.format(date));
+            outputListTemp.setOutputDate(sdf1.format(date));
+
+            outputListNew.add(outputListTemp);
+
+            //在庫更新
+
+            //現在在庫数量を更新する
+            StockList stockListOldTemp=new StockList();
+            stockListOldTemp.setGoodsListId(goodsList.getGoodsListId());
+            stockListOldTemp.setStockWarehouseId(outputListTemp.getWarehouseId());
+            stockListOldTemp=stockListService.getStockListByGoodsIdAndWarehouseId(stockListOldTemp);
+
+            //在庫数
+            Integer tempStock=stockListOldTemp.getStockputNum()-outputListForm.getOutputNum();
+            StockList stockListTemp=new StockList();
+            stockListTemp.setGoodsListId(goodsList.getGoodsListId());
+            stockListTemp.setStockputNum(-outputListForm.getOutputNum());
+            stockListTemp.setStockWarehouseId(outputListTemp.getWarehouseId());
+
+            stockListsNew.add(stockListTemp);
+
+
+            //DBに保存する
+
+            //入庫データを保存する
+            outputListNew=outputService.insertOutputDataByLists(outputListNew);
+            if(stockListsNew!=null){
+                for(int nIndex=0;nIndex<stockListsNew.size();nIndex++){
+                    stockListService.updateStockNumOneByOne(stockListsNew.get(nIndex));
+                }
+            }
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve(user.getUserName(),Config.TLogin,"単体新規出庫追加",session,request);
+            session.setAttribute("outputAddOne", outputListTemp);
+
+            return "redirect:/output/toAddPageOne";
+
+        }
+    }
+
+    /**
+     * 入庫追加ページ(単体)へ遷移します
+     * */
+    @RequestMapping(value="/toAddPageOne", method=RequestMethod.GET , produces = "text/html;charset=UTF-8")
+    public String toAddPageOne(HttpSession session,HttpServletRequest request){
+
+        //
+        User user = (User) session.getAttribute("user");
+        if(user == null){
+            return Config.LoginSession;
+        } else {
+            OutputList outputListTemp=new OutputList();
+            outputListTemp.setOutputDelFlg("0");
+            outputListTemp.setOutputNum(1);
+
+            GoodsList goodsListTemp=new GoodsList();
+            outputListTemp.setGoodsList(goodsListTemp);
+
+            List<Warehouse> warehouseList=typeService.getAllWarehouse();
+
+            session.setAttribute("outputAddOne", outputListTemp);
+            session.setAttribute("outputAddWarehouseList", warehouseList);
+            //historyテーブルを更新
+            historyValveService.addHistoryValve("","",Config.TLogin,session,request);
+
+            return "output/outputAddOne";
+        }
+    }
 
 }

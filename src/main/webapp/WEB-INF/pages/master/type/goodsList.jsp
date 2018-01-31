@@ -70,9 +70,7 @@
                                     <input type="button" id="master-location-confirm" class="btn btn-block btn-success"
                                            onclick="searchGoodsListData()" value="検索">
                                 </div>
-                                <div class="col-md-2">
-                                    <span id="goodsListData_num" class="goodsListData_num " STYLE="font-size: 16px;">合計 ${goodsListSearchData_num} 件</span>
-                                </div>
+
                             </div>
 
 						</div>

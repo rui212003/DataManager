@@ -18,6 +18,8 @@ public class OutputList implements Serializable {
     public  String  outputMiddletypeName;    //商品中分類
     public  String  outputSmalltypeName;    //商品小分類
 
+    public  String  goodsBarcode;    //商品バーコード
+
     public  int  outputNum;   //入庫数量
     public  Double  outputDiscount;   //入庫割引
     public  String  outputDate;   //入庫日付
@@ -75,6 +77,15 @@ public class OutputList implements Serializable {
     public String getOutputBigtypeName() {
         return outputBigtypeName;
     }
+
+    public String getGoodsBarcode() {
+        return goodsBarcode;
+    }
+
+    public void setGoodsBarcode(String goodsBarcode) {
+        this.goodsBarcode = goodsBarcode;
+    }
+
 
     public void setOutputBigtypeName(String outputBigtypeName) {
         this.outputBigtypeName = outputBigtypeName;

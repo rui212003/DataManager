@@ -249,14 +249,58 @@ public class GoodsListController {
             return gson.toJson("login");
         }
 
+    }
 
 
+    /**
+     * 出庫バーコードから商品情報を取得
+     * */
+    @RequestMapping(value="/getGoodListByBarcodeOutput",  method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getGoodListByBarcodeOutput(@RequestParam("outputBarcode")String outputBarcode,ModelMap modelMap,HttpSession session,HttpServletRequest request){
+        //session　check
+        User user=(User)session.getAttribute("user");
+        if(user == null){
+            modelMap.addAttribute("message",Config.TUserNull);
+            return Config.LoginSession;
+        }
 
+        Gson gson=new Gson();
 
+        OutputList outputListTemp=new OutputList();
 
+        //バーコード番号から商品情報を取得
+        GoodsList goodsList=goodsListService.getGoodsLisByBarcode(outputBarcode);
 
+        if(goodsList!=null){
+            outputListTemp.setGoodsList(goodsList);
+            outputListTemp.setGoodsListId(goodsList.getGoodsListId());
 
+            //大分類の文字を取得
+            Bigtype bittypetemp=typeService.getBigTypeByBigtypeId(goodsList.getGoodsBigtypeId());
+            outputListTemp.setOutputBigtypeName(bittypetemp.getBigtypeName());
+            outputListTemp.setOutputBigtypeId(bittypetemp.getBigtypeId());
 
+            //中分類の文字を取得
+            Middletype middletype=typeService.getMiddleTypeBytypeId(goodsList.getGoodsMiddletypeId());
+            outputListTemp.setOutputMiddletypeName(middletype.getMiddletypeName());
+            outputListTemp.setOutputMiddletypeId(middletype.getMiddletypeId());
+
+            //小分類の文字を取得
+            Smalltype smalltype=typeService.getSmallTypeBytypeId(goodsList.getGoodsSmalltypeId());
+            outputListTemp.setOutputSmalltypeName(smalltype.getSmalltypeName());
+            outputListTemp.setOutputSmalltypeId(smalltype.getSmalltypeId());
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve(Config.TOutputList,"バーコードから商品取得出庫","",session,request);
+
+            return gson.toJson(outputListTemp);
+        }else{
+
+            //historyテーブルを更新
+            historyValveService.addHistoryValve(Config.TOutputList,"バーコードから商品取得できない出庫","",session,request);
+            return gson.toJson("login");
+        }
 
     }
 

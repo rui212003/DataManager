@@ -442,7 +442,7 @@ public class InputController {
             Integer tempStock=stockListOldTemp.getStockputNum()+inputListForm.getInputNum();
             StockList stockListTemp=new StockList();
             stockListTemp.setGoodsListId(goodsList.getGoodsListId());
-            stockListTemp.setStockputNum(tempStock);
+            stockListTemp.setStockputNum(inputListForm.getInputNum());
             stockListTemp.setStockWarehouseId(inputListTemp.getWarehouseId());
 
             stockListsNew.add(stockListTemp);
@@ -460,7 +460,7 @@ public class InputController {
             historyValveService.addHistoryValve(user.getUserName(),Config.TLogin,"単体新規入庫追加",session,request);
 
             session.setAttribute("inputAddOne", inputListTemp);
-            return "input/inputAddOne";
+            return "redirect:/input/toAddPageOne";
         }
     }
 

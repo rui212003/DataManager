@@ -93,7 +93,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab_1">
-                            <table class="tablesorter table table-hover valve-table" id="outputDataList">
+                            <table class="tablesorter table table-hover valve-table" id="outputDataList" style="font-size: 15px;">
                                 <thead>
                                 <tr>
                                     <th>No</th>
